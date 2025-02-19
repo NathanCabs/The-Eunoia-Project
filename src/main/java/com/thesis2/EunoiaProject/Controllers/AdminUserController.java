@@ -46,3 +46,42 @@ public class AdminUserController {
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
+
+//import org.springframework.security.access.prepost.PreAuthorize;
+
+//@PreAuthorize("hasAuthority('ADMIN')")  // Ensures only ADMIN can access
+//@RestController
+//@RequestMapping("/api/admin/users")
+//public class AdminUserController {
+//
+//    private final UserService userService;
+//
+//    public AdminUserController(UserService userService) {
+//        this.userService = userService;
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<User>> getAllUsers() {
+//        return ResponseEntity.ok(userService.getAllUsers());
+//    }
+//
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<User> getUserById(@PathVariable int userId) {
+//        return userService.findById(userId)
+//                .map(ResponseEntity::ok)
+//                .orElseGet(() -> ResponseEntity.notFound().build());
+//    }
+//
+//    @PutMapping("/{userId}/update")
+//    public ResponseEntity<User> updateUser(@PathVariable int userId, @RequestBody User userRequest) {
+//        return ResponseEntity.ok(userService.updateUser(userId, userRequest));
+//    }
+//
+//    @DeleteMapping("/{userId}/delete")
+//    public ResponseEntity<Void> deleteUser(@PathVariable int userId) {
+//        return userService.deleteUser(userId) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+//    }
+//}
+
+
+

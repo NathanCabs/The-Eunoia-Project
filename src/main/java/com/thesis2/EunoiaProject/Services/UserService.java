@@ -23,7 +23,7 @@ public class UserService {
         }
 
         // Set default role as USER
-        user.setRole(Role.USER);
+        user.setRole("USER");
 
         // Save the user to the database
         return userRepository.save(user);
@@ -50,7 +50,7 @@ public class UserService {
         return userRepository.findById(userId).map(existingUser -> {
             existingUser.setEmail(userRequest.getEmail());
             existingUser.setUsername(userRequest.getUsername());
-            existingUser.setRole(userRequest.getRole()); // Allow updating role if needed
+            //existingUser.setRole(userRequest.getRole()); // Allow updating role if needed
             return userRepository.save(existingUser);
         }).orElse(null);
     }
