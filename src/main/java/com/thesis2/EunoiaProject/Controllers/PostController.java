@@ -2,12 +2,15 @@ package com.thesis2.EunoiaProject.Controllers;
 
 import com.thesis2.EunoiaProject.Model.Post;
 import com.thesis2.EunoiaProject.Services.PostService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
@@ -45,11 +48,35 @@ public class PostController {
         return updatedPost != null ? ResponseEntity.ok(updatedPost) : ResponseEntity.notFound().build();
     }
 
+    // @PutMapping("/{postId}/update")
+    // public ResponseEntity<Post> updatePost(@PathVariable int postId, @RequestParam int userId, @RequestBody Post postRequest) {
+    //     Optional<Post> existingPost = postService.getPostById(postId);
+
+    //     if (existingPost.isPresent() && existingPost.get().getUser().getId() == userId) {
+    //         Post updatedPost = postService.updatePost(postId, postRequest.getContent());
+    //         return ResponseEntity.ok(updatedPost);
+    //     } else {
+    //         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Prevent unauthorized updates
+    //     }
+    // }
+
     @DeleteMapping("/{postId}/delete")
     public ResponseEntity<Void> deletePost(@PathVariable int postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build();
     }
+
+    // @DeleteMapping("/{postId}/delete")
+    // public ResponseEntity<Void> deletePost(@PathVariable int postId, @RequestParam int userId) {
+    //     Optional<Post> existingPost = postService.getPostById(postId);
+
+    //     if (existingPost.isPresent() && existingPost.get().getUser().getId() == userId) {
+    //         postService.deletePost(postId);
+    //         return ResponseEntity.noContent().build();
+    //     } else {
+    //         return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Prevent unauthorized deletion
+    //     }
+    // }
 
     @PostMapping("/{postId}/like")
     public ResponseEntity<Void> likePost(@PathVariable int postId) {

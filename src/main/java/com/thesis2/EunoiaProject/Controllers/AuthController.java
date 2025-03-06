@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class AuthController {
@@ -50,15 +53,18 @@ public class AuthController {
 //    }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 
-        if (existingUser.isPresent()) {
+        if (existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())) {
             String token = jwtUtil.generateToken(existingUser.get().getUsername(), existingUser.get().getRole());
-            return ResponseEntity.ok("Bearer " + token);
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("role", existingUser.get().getRole());
+            return ResponseEntity.ok(response);
         }
 
-        return ResponseEntity.status(401).body("Invalid credentials");
+        return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
     }
 
 
