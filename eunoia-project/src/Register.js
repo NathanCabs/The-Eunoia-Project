@@ -5,7 +5,7 @@ import { useState } from 'react';
 function Register() {
   const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: "",
+        username: "",
         email: "",
         password: "",
         role: "USER",
@@ -39,7 +39,7 @@ function Register() {
     
           const result = await response.json();
           console.log(result); // Log the response from the backend
-          alert("Form submitted successfully!");
+          alert("Registered successfully!");
           navigate("/");
         } catch (error) {
           console.error("Error submitting form:", error);
@@ -51,31 +51,31 @@ function Register() {
     <center>
     <div className="container-md" style={{alignContent:"center", display:"grid", minHeight:"90vh"}}>
       <div>
-        <img width={150} height={150} src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"/>
+        <img width={150} height={150} src="../eunoia-icon.png" alt="Your Company"/>
         <h2>Create your account</h2>
       </div>
 
       <div>
         <form action="#" method="POST" onSubmit={handleSubmit}>
           <div>
-            <label for="username">Username</label>
+            <label>Username</label>
             <div>
-              <input type="username" name="username" id="username" placeholder="Username" autocomplete="username" value={formData.name} onChange={handleChange} required/>
+              <input type="text" name="username" id="username" placeholder="Username" value={formData.username} onChange={handleChange} required/>
             </div>
           </div>
           <div>
-            <label for="email">Email address</label>
+            <label>Email address</label>
             <div>
-              <input type="email" name="email" id="email" placeholder="Email" autocomplete="email" value={formData.email} onChange={handleChange} required/>
+              <input type="email" name="email" id="email" placeholder="Email" value={formData.email} onChange={handleChange} required/>
             </div>
           </div>
 
           <div>
             <div>
-              <label for="password">Password</label>
+              <label>Password</label>
             </div>
             <div>
-              <input type="password" name="password" id="password" placeholder="Password" autocomplete="current-password" value={formData.password} onChange={handleChange} required/>
+              <input type="password" name="password" id="password" placeholder="Password" value={formData.password} onChange={handleChange} required/>
             </div>
           </div>
           <div>

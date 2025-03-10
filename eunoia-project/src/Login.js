@@ -17,62 +17,76 @@ function Login() {
         }));
     };
     
-      const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form behavior
-        console.log(formData); // Log form data for debugging
-    
-        // Send data to the Spring Boot backend
-        try {
+    const handleSubmit = async (e) => {
+      e.preventDefault(); // Prevent default form behavior
+      console.log(formData); // Debugging
+  
+      try {
           const response = await fetch("http://localhost:6543/api/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json", //request token 
-            },
-            body: JSON.stringify(formData), //send form data as json
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ 
+                  email: formData.email, 
+                  password: formData.password 
+              }),
           });
-          
+  
+          // Check if response is valid JSON
           const result = await response.json();
-          console.log(result);
-
+          console.log("Response from backend:", result); // Debugging
+  
+          if (!response.ok) {
+              throw new Error(result.message || "Invalid email or password.");
+          }
+  
+          // ✅ Make sure the token exists before storing
           if (result.token) {
-            localStorage.setItem("authToken", result.token); // Store the token in localStorage
-            alert("Login successful!"); // Show success message
-            if (result.role === "ADMIN") {
-              navigate("/admin"); // Redirect to admin dashboard
-            } else {
-                navigate("/home"); // Redirect to landing page for regular users
-            }
-            } else {
-                alert("Invalid email or password."); // Show error message
-            }
-            } catch (error) {
-                console.error("Error submitting form:", error);
-                alert(error.message || "Error submitting form."); // Show error message
-            }
-        };
+              localStorage.setItem("authToken", result.token); 
+              console.log("Token stored:", result.token); // Debugging
+          } else {
+              throw new Error("No token received from server.");
+          }
+  
+          alert("Login successful!"); 
+  
+          // ✅ Redirect user based on role
+          if (result.role === "ADMIN") {
+              navigate("/admin");
+          } else {
+              navigate("/home");
+          }
+  
+      } catch (error) {
+          console.error("Error submitting form:", error);
+          alert(error.message || "Error submitting form.");
+      }
+  };
+  
   return (
     <center>
     <div className="container-md" style={{alignContent:"center", display:"grid", minHeight:"90vh"}}>
       <div>
-        <img width={150} height={150} src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"/>
+        <img width={150} height={150} src="../eunoia-icon.png" alt="Your Company"/>
         <h2>Log in to your account</h2>
       </div>
 
       <div>
         <form action="#" method="POST" onSubmit={handleSubmit}>
           <div>
-            <label for="email">Email address</label>
+            <label>Email address</label>
             <div>
-              <input type="email" name="email" id="email" placeholder="Email" autocomplete="email" value={formData.email} onChange={handleChange} required/>
+              <input type="email" name="email" id="email" placeholder="Email" value={formData.email} onChange={handleChange} required/>
             </div>
           </div>
 
           <div>
             <div>
-              <label for="password">Password</label>
+              <label>Password</label>
             </div>
             <div>
-              <input type="password" name="password" id="password" placeholder="Password" autocomplete="current-password" value={formData.password} onChange={handleChange} required/>
+              <input type="password" name="password" id="password" placeholder="Password" value={formData.password} onChange={handleChange} required/>
             </div>
             <div>
                 <a href="/forgot_password">Forgot password?</a>

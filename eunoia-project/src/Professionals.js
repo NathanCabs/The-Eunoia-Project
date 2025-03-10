@@ -15,14 +15,20 @@ function Professionals() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                        <h1>Hi</h1>
+                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px", margin:"20px"}}>
+                    <center>
+                        <img src='../pro1.jpg' width={270} height={369} alt="" style={{borderRadius:"30px"}}/>
+                    </center>
                     </Col>
-                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                        <h1>Hello</h1>
+                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px", margin:"20px"}}>
+                    <center>
+                        <img src='../pro2.jpg' width={270} height={369} alt="" style={{borderRadius:"30px"}}/>
+                    </center>
                     </Col>
-                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                        <h1>Bruh</h1>
+                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px", margin:"20px"}}>
+                    <center>
+                        <img src='../pro3.jpeg' width={270} height={369} alt="" style={{borderRadius:"30px"}}/>
+                    </center>
                     </Col>
                 </Row>
             </Container>

@@ -6,23 +6,25 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
-const handleLogout = () => {
-    // Remove the JWT token from localStorage
-    localStorage.removeItem("authToken");
-
-    // Optionally, redirect to the login page
-    alert("You have been logged out.");
-};
-
+import { useNavigate } from 'react-router-dom';
 
 const NavigationBar = () => {
+    const navigate = useNavigate();
     const activeState = ({ isActive }) => {
         return {
           color: isActive ? "#82060D" : "",
           fontWeight: isActive ? "bold" : ""
         };
       };
+
+      const handleLogout = () => {
+        // Remove the JWT token from localStorage
+        localStorage.removeItem("authToken");
+    
+        // Optionally, redirect to the login page
+        alert("You have been logged out.");
+        navigate("/");
+    };
     return (
         /*  Search bar
             Profile icon
@@ -46,7 +48,7 @@ const NavigationBar = () => {
         */
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="/home"><img src='../sample.jpg' width={30} height={30}/>Eunoia</Navbar.Brand>
+          <Navbar.Brand href="/home"><img src='../eunoia-icon.png' width={40} height={40} alt=""/>Eunoia</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
@@ -60,17 +62,17 @@ const NavigationBar = () => {
                         />
                     </Col>
                     <Col xs="auto">
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit">Search</Button>
                     </Col>
                     </Row>
                 </Form>
             </Nav>
             <Nav>
-                <Nav.Link href="/create">+ Create</Nav.Link>
-                <Nav.Link href="/professionals">Professionals</Nav.Link>
-                <Nav.Link href="/resources">Resources</Nav.Link>
-                <Nav.Link href="/message">Message</Nav.Link>
-                <Nav.Link href="/profile">Profile</Nav.Link>
+                <Nav.Link href="/create" style={{activeState}}>+ Create</Nav.Link>
+                <Nav.Link href="/professionals" style={{activeState}}>Professionals</Nav.Link>
+                <Nav.Link href="/resources" style={{activeState}}>Resources</Nav.Link>
+                <Nav.Link href="/profile" style={{activeState}}>Profile</Nav.Link>
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link> 
             </Nav>
           </Navbar.Collapse>
         </Container>

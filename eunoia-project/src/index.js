@@ -16,6 +16,8 @@ import CreatePost from './CreatePost';
 import Admin from './Admin';
 import ForgotPass from './ForgotPass';
 import reportWebVitals from './reportWebVitals';
+import PostDetail from './PostDetail';
+import ProfessionalDetail from './ProfessionalDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +36,8 @@ root.render(
         <Route path="/message" element={<Message />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/forgot_password" element={<ForgotPass />} />
+        <Route path="/post_detail" element={<PostDetail />} />
+        <Route path="/professional_detail" element={<ProfessionalDetail />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

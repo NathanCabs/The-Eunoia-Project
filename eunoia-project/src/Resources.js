@@ -15,14 +15,14 @@ function Resources() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                        <h1>Hi</h1>
+                    <Col style={{backgroundColor:"#3f48cc", padding:"10px", borderRadius:"30px", margin:"20px"}}>
+                        <h1 style={{color:"#ffffff"}}>Resource 1</h1>
                     </Col>
-                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                        <h1>Hello</h1>
+                    <Col style={{backgroundColor:"#3f48cc", padding:"10px", borderRadius:"30px", margin:"20px"}}>
+                        <h1 style={{color:"#ffffff"}}>Resource 2</h1>
                     </Col>
-                    <Col style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                        <h1>Bruh</h1>
+                    <Col style={{backgroundColor:"#3f48cc", padding:"10px", borderRadius:"30px", margin:"20px"}}>
+                        <h1 style={{color:"#ffffff"}}>Resource 3</h1>
                     </Col>
                 </Row>
             </Container>
