@@ -1,6 +1,8 @@
 package com.thesis2.EunoiaProject.Controllers;
 
 import com.thesis2.EunoiaProject.Model.Comment;
+import com.thesis2.EunoiaProject.Repository.UserRepository;
+import com.thesis2.EunoiaProject.Security.JwtUtil;
 import com.thesis2.EunoiaProject.Services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
