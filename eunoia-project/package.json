@@ -2,7 +2,7 @@
   "name": "eunoia-project",
   "version": "0.1.0",
   "private": true,
-  "proxy":"localhost:6543",
+  "proxy":"http://localhost:6543",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",

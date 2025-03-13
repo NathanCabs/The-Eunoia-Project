@@ -1,17 +1,17 @@
 import './Login.css';
-import NavigationBar from './NavigationBar';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+// import NavigationBar from './NavigationBar';
+// import Container from 'react-bootstrap/Container';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
 import React, { useState } from 'react';
-import axios from 'axios';
+ import axios from 'axios';
 
-const CreatePost = ({ userId }) => {
-
-    const [content, setContent] = useState("");
+const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
+    const [content, setContent] = useState(post ? post.content : "");
     const [error, setError] = useState("");
+    const userId = localStorage.getItem("userId");
 
-    const handleCreatePost = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
@@ -22,28 +22,42 @@ const CreatePost = ({ userId }) => {
         }
 
         try {
-            const response = await fetch("api/posts/create", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Accept": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    user: { id: userId }, // Ensure user ID is sent
-                    content,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to create post");
+            if (post){
+                await axios.put(`http://localhost:6543/api/posts/${post.id}/update`,{ 
+                    content },
+                    { headers: { 
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    } }
+                  );
+                alert("Post updated successfully!");
+                cancelEdit();
+                refreshPosts();
+            } else {
+                const response = await fetch("http://localhost:6543/api/posts/create", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({
+                        user: { id: userId },
+                        content,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error("Failed to create post");
+                }
+    
+                const newPost = await response.json();
+                console.log("Post created:", newPost);
+                setContent(""); // Clear input after successful post creation
+                alert("Post created successfully!");
             }
-
-            const newPost = await response.json();
-            console.log("Post created:", newPost);
-
-            setContent(""); // Clear input after successful post creation
-            alert("Post created successfully!");
         } catch (err) {
             console.error("Error creating post:", err);
             setError(err.message || "An error occurred.");
@@ -52,36 +66,30 @@ const CreatePost = ({ userId }) => {
 
     return(
         <div fluid>
-            <NavigationBar />
-            <Container style={{width:"100%", paddingTop:"1.5rem"}}>
-                <Row>
-                    <Col style={{paddingBottom:"1.5rem"}}>
-                        <h1>Create</h1>
-                    </Col>
-                </Row>
-                <Row style={{backgroundColor:"#282c34", padding:"10px", borderRadius:"30px"}}>
-                    <Col style={{backgroundColor:"#787878", padding:"15px 30px", borderRadius:"25px"}}>
-                    <form action="#" method="POST" onSubmit={handleCreatePost}>
-                        {/* <div>
-                                <label for="title">Title</label>
-                            <div>
-                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required/>
-                            </div>
-                        </div> */}
-                        <div>
-                                <label>Content</label>
-                            <div>
-                                <input type="text" value={content} onChange={(e) => setContent(e.target.value)} placeholder="What's on your mind?" required/>
-                            </div>
-                            {error && <p style={{ color: 'red' }}>{error}</p>}
-                        </div>
-                        <div>
-                            <button type="submit">Post</button>
-                        </div>
-                    </form>
-                    </Col>
-                </Row>
-            </Container>
+            <form action="#" method="POST" onSubmit={handleSubmit}>
+                <div>
+                    <div>
+                        {/* <input type="text" value={content} onChange={(e) => setContent(e.target.value)} placeholder={post ? "Edit Post" : "What's on your mind?"} required/> */}
+                        <textarea
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            placeholder={post ? "Edit Post" : "What's on your mind?"}
+                            required
+                            style={{ width: "100%", minHeight: "50px", resize: "none", overflowY: "hidden" }}
+                            rows={1}
+                            onInput={(e) => {
+                                e.target.style.height = "auto"; // Reset height
+                                e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height dynamically
+                            }}
+                        ></textarea>
+                    </div>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                </div>
+                <div>
+                    {post && <button type="button" onClick={cancelEdit}>Cancel</button>}
+                    <button type="submit">{post ? "Done" : "Post"}</button>
+                </div>
+            </form>
         </div>
     )
 }

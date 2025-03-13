@@ -36,8 +36,8 @@ root.render(
         <Route path="/message" element={<Message />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/forgot_password" element={<ForgotPass />} />
-        <Route path="/post_detail" element={<PostDetail />} />
         <Route path="/professional_detail" element={<ProfessionalDetail />} />
+        <Route path="/post/:postId" element={<PostDetail />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

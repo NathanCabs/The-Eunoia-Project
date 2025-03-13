@@ -68,7 +68,6 @@ const NavigationBar = () => {
                 </Form>
             </Nav>
             <Nav>
-                <Nav.Link href="/create" style={{activeState}}>+ Create</Nav.Link>
                 <Nav.Link href="/professionals" style={{activeState}}>Professionals</Nav.Link>
                 <Nav.Link href="/resources" style={{activeState}}>Resources</Nav.Link>
                 <Nav.Link href="/profile" style={{activeState}}>Profile</Nav.Link>

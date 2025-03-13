@@ -42,9 +42,10 @@ function Login() {
           }
   
           // ✅ Make sure the token exists before storing
-          if (result.token) {
-              localStorage.setItem("authToken", result.token); 
-              console.log("Token stored:", result.token); // Debugging
+          if (result.token && result.userId) {
+              localStorage.setItem("authToken", result.token);
+              localStorage.setItem("userId", result.userId); // Save userId
+              console.log("Stored userId:", result.userId);
           } else {
               throw new Error("No token received from server.");
           }
