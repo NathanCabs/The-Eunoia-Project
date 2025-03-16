@@ -80,8 +80,24 @@ public class AuthController {
 //        }
 //    }
 
+    // @PostMapping("/login")
+    // public ResponseEntity<String> login(@RequestBody User user) {
+    //     Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+
+    //     if (existingUser.isPresent()) {
+    //         String token = jwtUtil.generateToken(
+    //                 existingUser.get().getUsername(),
+    //                 existingUser.get().getEmail(),
+    //                 existingUser.get().getRole());
+
+    //         return ResponseEntity.ok(token);
+    //     }
+
+    //     return ResponseEntity.status(401).body("Invalid credentials");
+    // }
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 
         if (existingUser.isPresent()) {
@@ -90,11 +106,18 @@ public class AuthController {
                     existingUser.get().getEmail(),
                     existingUser.get().getRole());
 
-            return ResponseEntity.ok("Bearer " + token);
+            // ✅ Return JSON object instead of plain string
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("userId", String.valueOf(existingUser.get().getId())); // Optional
+            response.put("role", existingUser.get().getRole());
+
+            return ResponseEntity.ok(response);
         }
 
-        return ResponseEntity.status(401).body("Invalid credentials");
+        return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
     }
+
 
 
     @GetMapping("/id")
