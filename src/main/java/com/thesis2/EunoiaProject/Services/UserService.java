@@ -40,6 +40,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    // Get User by Email
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     // ✅ Get all users (Admin feature)
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -48,8 +53,8 @@ public class UserService {
     // ✅ Update user
     public User updateUser(int userId, User userRequest) {
         return userRepository.findById(userId).map(existingUser -> {
-            existingUser.setEmail(userRequest.getEmail());
             existingUser.setUsername(userRequest.getUsername());
+            existingUser.setPassword(userRequest.getPassword());
             //existingUser.setRole(userRequest.getRole()); // Allow updating role if needed
             return userRepository.save(existingUser);
         }).orElse(null);

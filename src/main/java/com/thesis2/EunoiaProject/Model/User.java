@@ -16,13 +16,17 @@ public class User {
 
     private String role;
 
+    @Column(nullable = true)
+    private String recommendedProfessional;
+
     public User() {}
 
-    public User(String email, String username, String password, String role) {
+    public User(String email, String username, String password, String role, String recommendedProfessional) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.recommendedProfessional = recommendedProfessional;
     }
 
     public int getId() {
@@ -63,5 +67,12 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getRecommendedProfessional() {
+        return recommendedProfessional;
+    }
+    public void setRecommendedProfessional(String recommendedProfessional) {
+        this.recommendedProfessional = recommendedProfessional;
     }
 }

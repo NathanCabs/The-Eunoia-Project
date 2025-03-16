@@ -1,9 +1,13 @@
 package com.thesis2.EunoiaProject.Controllers;
 
 
+import com.thesis2.EunoiaProject.DTO.MHPRegisterRequest;
+import com.thesis2.EunoiaProject.Model.MentalHealthProfessionals;
 import com.thesis2.EunoiaProject.Model.User;
+import com.thesis2.EunoiaProject.Repository.MentalHealthProfessionalsRepository;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import com.thesis2.EunoiaProject.Security.JwtUtil;
+import com.thesis2.EunoiaProject.Services.MentalHealthProfessionalsService;
 import com.thesis2.EunoiaProject.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +25,15 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+    private final MentalHealthProfessionalsService MHPService;
+    private final MentalHealthProfessionalsRepository MHPRepo;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserRepository userRepository, JwtUtil jwtUtil) {
+    public AuthController(UserRepository userRepository, JwtUtil jwtUtil, MentalHealthProfessionalsService MHPService, MentalHealthProfessionalsRepository MHPRepo) {
         this.userRepository = userRepository;
+        this.MHPService = MHPService;
+        this.MHPRepo = MHPRepo;
         this.jwtUtil = jwtUtil;
     }
 
@@ -36,7 +44,27 @@ public class AuthController {
         return userService.registerUser(user);
     }
 
+    //PROFESSIONAL REGISTER
+    @PostMapping("/register/professional")
+    public String registerProfessional(@RequestBody MHPRegisterRequest registerRequest) {
+        return MHPService.registerProfessional(registerRequest);
+    }
 
+    //PROFESSIONAL LOGIN
+    @PostMapping("/login/professional")
+    public ResponseEntity<String> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
+        Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
+
+        if (existingMHP.isPresent()) {
+            String token = jwtUtil.generateToken(
+                    existingMHP.get().getUsername(),
+                    existingMHP.get().getEmail(),
+                    existingMHP.get().getRole());
+
+            return ResponseEntity.ok("Bearer " + token);
+        }
+        return ResponseEntity.status(401).body("Invalid email or password");
+    }
 
 //    @PostMapping("/login")
 //    public String loginUser(@RequestBody Map<String, String> requestBody) {
@@ -53,19 +81,19 @@ public class AuthController {
 //    }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
+    public ResponseEntity<String> login(@RequestBody User user) {
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
 
-        if (existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())) {
-            String token = jwtUtil.generateToken(existingUser.get().getUsername(), existingUser.get().getRole());
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            response.put("role", existingUser.get().getRole());
-            response.put("userId", String.valueOf(existingUser.get().getId()));
-            return ResponseEntity.ok(response);
+        if (existingUser.isPresent()) {
+            String token = jwtUtil.generateToken(
+                    existingUser.get().getUsername(),
+                    existingUser.get().getEmail(),
+                    existingUser.get().getRole());
+
+            return ResponseEntity.ok("Bearer " + token);
         }
 
-        return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
+        return ResponseEntity.status(401).body("Invalid credentials");
     }
 
 

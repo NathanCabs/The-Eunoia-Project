@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig{
+public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
@@ -30,27 +30,28 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 1) Enable cors in HttpSecurity
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 👈 Ensure CORS applies
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/login", "/api/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/admin/users/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/professionals/add").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/professionals/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/professionals/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll() // 👈 Allow all users to fetch posts
-                .requestMatchers(HttpMethod.POST, "/api/posts/create").authenticated() // 👈 Ensure only logged-in users create/edit posts
-                .requestMatchers(HttpMethod.PUT, "/api/posts/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/posts/**").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/comments/post/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/comments/add").authenticated() // Requires auth
-                .requestMatchers(HttpMethod.PUT, "/api/comments/update/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/comments/delete/**").authenticated()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 👈 Ensure CORS applies
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/login/**", "/api/register/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**").authenticated()
+                        .requestMatchers("/api/professionals/recommended").authenticated()
+                        .requestMatchers("/api/posts/**").authenticated()
+                        .requestMatchers("/api/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/professionals/**").authenticated()
+                        .requestMatchers("/api/bookings/user").authenticated()
+                        .requestMatchers("/api/bookings/professional").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/bookings/admin").hasAuthority("ADMIN")
+                        .requestMatchers("/api/bookings/**").authenticated()
+                       // .requestMatchers(HttpMethod.POST, "/api/login/professional").hasAuthority("PROFESSIONAL")
+                        .requestMatchers(HttpMethod.GET, "/api/admin/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/professionals/add").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/professionals/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/professionals/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

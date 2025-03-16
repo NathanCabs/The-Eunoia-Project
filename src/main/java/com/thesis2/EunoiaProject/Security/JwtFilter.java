@@ -1,5 +1,6 @@
 package com.thesis2.EunoiaProject.Security;
 
+import com.thesis2.EunoiaProject.Repository.MentalHealthProfessionalsRepository;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -23,10 +24,12 @@ import java.util.Optional;
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final MentalHealthProfessionalsRepository MHPRepository;
 
-    public JwtFilter(JwtUtil jwtUtil, UserRepository userRepository) {
+    public JwtFilter(JwtUtil jwtUtil, UserRepository userRepository, MentalHealthProfessionalsRepository MHPRepository) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.MHPRepository = MHPRepository;
     }
 
     @Override
@@ -41,22 +44,63 @@ public class JwtFilter extends OncePerRequestFilter {
 
         final String token = authHeader.substring(7);
         final String username = jwtUtil.extractUsername(token);
+        final String email = jwtUtil.extractEmail(token);
         final String role = jwtUtil.extractRole(token);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Optional<UserDetails> userDetails = userRepository.findByUsername(username)
-                    .map(user -> new org.springframework.security.core.userdetails.User(
-                            user.getUsername(),
-                            user.getPassword(),
-                            Collections.singleton(new SimpleGrantedAuthority(role))));
+        System.out.println("Username: " + username);
+        System.out.println("Email: " + email);
+        System.out.println("Role: " + role);
 
-            if (userDetails.isPresent() && jwtUtil.isTokenValid(token, username)) {
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            Optional<UserDetails> userDetails = Optional.empty();
+
+            if ("USER".equals(role)) {
+                userDetails = userRepository.findByEmail(email)
+                        .map(user -> new org.springframework.security.core.userdetails.User(
+                                user.getEmail(),
+                                user.getPassword(),
+                                Collections.singleton(new SimpleGrantedAuthority(role))
+                        ));
+            } else if ("PROFESSIONAL".equals(role)) {
+                userDetails = MHPRepository.findByEmail(email)
+                        .map(professional -> new org.springframework.security.core.userdetails.User(
+                                professional.getEmail(),
+                                professional.getPassword(),
+                                Collections.singleton(new SimpleGrantedAuthority(role))
+                        ));
+            }
+                else if ("ADMIN".equals(role)) { // ➡️ Handle the ADMIN role
+                    userDetails = userRepository.findByEmail(email) // Admin should be in the User table
+                            .map(user -> new org.springframework.security.core.userdetails.User(
+                                    user.getEmail(),
+                                    user.getPassword(),
+                                    Collections.singleton(new SimpleGrantedAuthority(role))
+                            ));
+            }
+
+            if (userDetails.isPresent() && jwtUtil.isTokenValid(token, email)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails.get(), null, userDetails.get().getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
+//        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//            Optional<UserDetails> userDetails = userRepository.findByEmail(email)
+//                    .map(user -> new org.springframework.security.core.userdetails.User(
+//                            user.getEmail(),
+//                            user.getPassword(),
+//                            Collections.singleton(new SimpleGrantedAuthority(role))));
+//
+//            if (userDetails.isPresent() && jwtUtil.isTokenValid(token, email)) {
+//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+//                        userDetails.get(), null, userDetails.get().getAuthorities());
+//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//                //request.setAttribute("email", email);
+//            }
+//        }
         chain.doFilter(request, response);
     }
 }
