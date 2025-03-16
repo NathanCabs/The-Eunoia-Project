@@ -7,6 +7,7 @@ import com.thesis2.EunoiaProject.Services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 public class CommentController {
 
     @Autowired
@@ -35,38 +36,38 @@ public class CommentController {
         return commentService.getCommentById(id);
     }
 
+    // @PutMapping("/update/{id}")
+    // public Comment updateComment(@PathVariable int id, @RequestParam String newContent) {
+    //     return commentService.updateComment(id, newContent);
+    // }
+
     @PutMapping("/update/{id}")
-    public Comment updateComment(@PathVariable int id, @RequestParam String newContent) {
-        return commentService.updateComment(id, newContent);
+    public ResponseEntity<Comment> updateComment(@PathVariable int id, @RequestParam int userId, @RequestParam String newContent) {
+        Optional<Comment> existingComment = commentService.getCommentById(id);
+
+        if (existingComment.isPresent() && existingComment.get().getUser().getId() == userId) {
+            Comment updatedComment = commentService.updateComment(id, newContent);
+            return ResponseEntity.ok(updatedComment);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Prevent unauthorized updates
+        }
     }
 
-    // @PutMapping("/update/{id}")
-    // public ResponseEntity<Comment> updateComment(@PathVariable int id, @RequestParam int userId, @RequestParam String newContent) {
-    //     Optional<Comment> existingComment = commentService.getCommentById(id);
-
-    //     if (existingComment.isPresent() && existingComment.get().getUser().getId() == userId) {
-    //         Comment updatedComment = commentService.updateComment(id, newContent);
-    //         return ResponseEntity.ok(updatedComment);
-    //     } else {
-    //         return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Prevent unauthorized updates
-    //     }
+    // @DeleteMapping("/delete/{id}")
+    // public String deleteComment(@PathVariable int id) {
+    //     commentService.deleteComment(id);
+    //     return "Comment deleted successfully";
     // }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteComment(@PathVariable int id) {
+    public ResponseEntity<String> deleteComment(@PathVariable int id, @RequestParam int userId) {
+    Optional<Comment> existingComment = commentService.getCommentById(id);
+
+    if (existingComment.isPresent() && existingComment.get().getUser().getId() == userId) {
         commentService.deleteComment(id);
-        return "Comment deleted successfully";
+        return ResponseEntity.ok("Comment deleted successfully");
+    } else {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unauthorized to delete this comment");
     }
-
-//     @DeleteMapping("/delete/{id}")
-// public ResponseEntity<String> deleteComment(@PathVariable int id, @RequestParam int userId) {
-//     Optional<Comment> existingComment = commentService.getCommentById(id);
-
-//     if (existingComment.isPresent() && existingComment.get().getUser().getId() == userId) {
-//         commentService.deleteComment(id);
-//         return ResponseEntity.ok("Comment deleted successfully");
-//     } else {
-//         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unauthorized to delete this comment");
-//     }
-// }
+}
 }
