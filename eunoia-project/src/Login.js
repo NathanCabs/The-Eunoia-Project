@@ -90,8 +90,8 @@ function Login() {
               <input type="password" name="password" id="password" placeholder="Password" value={formData.password} onChange={handleChange} required/>
             </div>
             <div>
-                <a href="/forgot_password">Forgot password?</a>
-                <br></br>
+                {/* <a href="/forgot_password">Forgot password?</a> */}
+                {/* <br></br> */}
                 <a href="/register">Don't have an account? Create one</a>
             </div>
           </div>

@@ -54,7 +54,7 @@ const NavigationBar = () => {
             <Nav className="me-auto">
                 <Form inline>
                     <Row>
-                    <Col xs="auto">
+                    {/* <Col xs="auto">
                         <Form.Control
                         type="text"
                         placeholder="Search"
@@ -63,7 +63,7 @@ const NavigationBar = () => {
                     </Col>
                     <Col xs="auto">
                         <Button type="submit">Search</Button>
-                    </Col>
+                    </Col> */}
                     </Row>
                 </Form>
             </Nav>

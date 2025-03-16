@@ -27,40 +27,34 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                     content },
                     { headers: { 
                         Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
+                        "Content-Type": "application/json"
                     } }
                   );
                 alert("Post updated successfully!");
                 cancelEdit();
-                refreshPosts();
-            } else {
-                const response = await fetch("http://localhost:6543/api/posts/create", {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({
-                        user: { id: userId },
-                        content,
-                    }),
-                });
-    
-                if (!response.ok) {
-                    throw new Error("Failed to create post");
+                if (refreshPosts) {
+                    refreshPosts(); // ✅ Only call if it's defined
                 }
+            } else {
+                const response = await axios.post("http://localhost:6543/api/posts/create", {
+                    user: { id: userId },
+                    content,
+                  }, {
+                    headers: { Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json" 
+                }});
     
-                const newPost = await response.json();
+                const newPost = await response.data;
                 console.log("Post created:", newPost);
                 setContent(""); // Clear input after successful post creation
                 alert("Post created successfully!");
+                if (refreshPosts) {
+                    refreshPosts(); // ✅ Only call if it's defined
+                }
             }
         } catch (err) {
             console.error("Error creating post:", err);
-            setError(err.message || "An error occurred.");
+            setError(err.response?.data?.message || "An error occurred.");
         }
     };
 
@@ -69,7 +63,6 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
             <form action="#" method="POST" onSubmit={handleSubmit}>
                 <div>
                     <div>
-                        {/* <input type="text" value={content} onChange={(e) => setContent(e.target.value)} placeholder={post ? "Edit Post" : "What's on your mind?"} required/> */}
                         <textarea
                             value={content}
                             onChange={(e) => setContent(e.target.value)}

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Comment from './Comment';
+import AddComment from './AddComment';
 import PostForm from './CreatePost';
 
 function Home() {
@@ -22,16 +23,20 @@ function Home() {
       username: localStorage.getItem("username"),
     };
 
-    useEffect(() => {
-        fetchPosts();
-      }, []);
+      useEffect(() => {
+          fetchPosts();
+        }, []);
   
     const fetchPosts = async () => {
       try {
         const response = await axios.get("http://localhost:6543/api/posts", {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: {
+              Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", },
+            withCredentials: true,
         });
-        setPosts(response.data);
+        const sortedPosts = response.data.sort((a, b) => b.likes - a.likes);
+        setPosts(sortedPosts);
       } catch (err) {
         console.error("Error fetching posts", err);
       }
@@ -40,7 +45,9 @@ function Home() {
     const handleDelete = async (postId) => {
         try {
           await axios.delete(`http://localhost:6543/api/posts/${postId}/delete`, {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", },
+            withCredentials: true,
           });
           alert("Post deleted successfully!");
           fetchPosts();
@@ -70,7 +77,7 @@ function Home() {
           <Row>
             <Col style={{ paddingBottom: "1.5rem" }}>
               <h1>Home</h1>
-              <PostForm />
+              <PostForm refreshPosts={fetchPosts}/>
             </Col>
           </Row>
           {posts.length > 0 ? (
@@ -93,12 +100,18 @@ function Home() {
                         <PostForm post={editingPost} refreshPosts={handleUpdateComplete} cancelEdit={() => setEditingPost(null)}/>
                     )}
                   </div>
-                  <div>
-                    <p>{post.likes} Likes</p>
-                  </div>
-                  <div>
-                    <Comment postId={post.id} user={currentUser} />
-                  </div>
+                   {/* ✅ Add Like/Unlike Button */}
+                   <div>
+                      <p>{post.likes} Likes</p>
+                          <button>
+                            👍 Like
+                          </button>
+                    </div>
+                    <br></br>
+                    {/* ✅ AddComment Component */}
+                    <AddComment postId={post.id} onCommentAdded={fetchPosts} />
+                    {/* ✅ Show limited comments */}
+                    <Comment postId={post.id} showAll={false} />
                 </Col>
               </Row>
             ))

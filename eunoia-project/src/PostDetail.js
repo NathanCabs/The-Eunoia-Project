@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import axios from "axios"; 
 import Comment from "./Comment"; 
+import AddComment from "./AddComment";
 import NavigationBar from './NavigationBar';
 
 const PostDetail = () => {
@@ -17,8 +18,12 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-              //const token = localStorage.getItem("authToken");
-                const response = await axios.get(`http://localhost:6543/api/posts/${postId}`);
+                const token = localStorage.getItem("authToken");
+                const response = await axios.get(`http://localhost:6543/api/posts/${postId}`, {
+                  headers: { Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json", },
+                  withCredentials: true,
+                });
                 setPost(response.data);
             } catch (err) {
                 setError("Post not found.");
@@ -29,6 +34,11 @@ const PostDetail = () => {
 
         fetchPost();
     }, [postId]);
+
+    const refreshComments = async () => {
+      // Optionally trigger a refresh in the CommentList component
+      console.log("Refreshing comments...");
+    };
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
@@ -42,7 +52,11 @@ const PostDetail = () => {
               <Link to="/home">Back</Link>
                 <h2>{post.user.username}'s Post</h2>
                 <p>{post.content}</p>
-                <Comment postId={post.id} user={{ id: localStorage.getItem("userId") }} />
+                {/* ✅ AddComment for adding new comments */}
+                <AddComment postId={post.id} onCommentAdded={refreshComments} />
+
+                {/* ✅ Display all comments */}
+                <Comment postId={post.id} showAll={true} />
               </Col>
             </Row>
           </Container>

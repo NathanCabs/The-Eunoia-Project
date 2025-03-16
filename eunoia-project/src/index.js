@@ -18,10 +18,10 @@ import ForgotPass from './ForgotPass';
 import reportWebVitals from './reportWebVitals';
 import PostDetail from './PostDetail';
 import ProfessionalDetail from './ProfessionalDetail';
+import AddComment from './AddComment';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -38,9 +38,9 @@ root.render(
         <Route path="/forgot_password" element={<ForgotPass />} />
         <Route path="/professional_detail" element={<ProfessionalDetail />} />
         <Route path="/post/:postId" element={<PostDetail />} />
+        <Route path="/add" element={<AddComment />} />
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
