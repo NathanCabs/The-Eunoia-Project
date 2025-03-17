@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/professionals/recommended").authenticated()
                         .requestMatchers("/api/posts/**").permitAll()
                         .requestMatchers("/api/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"api/pre-assessment/submit").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/professionals/**").authenticated()
                         .requestMatchers("/api/bookings/user").authenticated()
                         .requestMatchers("/api/bookings/professional").authenticated()
