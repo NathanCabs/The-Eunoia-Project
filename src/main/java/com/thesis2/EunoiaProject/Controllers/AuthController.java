@@ -71,20 +71,43 @@ public class AuthController {
     //     }
     //     return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
     // }
+
     @PostMapping("/login/professional")
-    public ResponseEntity<String> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
-        Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
-
-        if (existingMHP.isPresent()) {
-            String token = jwtUtil.generateToken(
-                    existingMHP.get().getUsername(),
-                    existingMHP.get().getEmail(),
-                    existingMHP.get().getRole());
-
-            return ResponseEntity.ok("Bearer " + token);
-        }
-        return ResponseEntity.status(401).body("Invalid email or password");
+    public ResponseEntity<Map<String, String>> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
+    Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
+    
+    // Optionally check the password as well
+    if (existingMHP.isPresent() && existingMHP.get().getPassword().equals(mentalHealthProfessionals.getPassword())) {
+        String token = jwtUtil.generateToken(
+                existingMHP.get().getUsername(),
+                existingMHP.get().getEmail(),
+                existingMHP.get().getRole());
+                
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", String.valueOf(existingMHP.get().getId()));
+        response.put("role", existingMHP.get().getRole());
+        return ResponseEntity.ok(response);
     }
+    
+    return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
+}
+
+
+    // @PostMapping("/login/professional")
+    // public ResponseEntity<String> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
+    //     Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
+
+    //     if (existingMHP.isPresent()) {
+    //         String token = jwtUtil.generateToken(
+    //                 existingMHP.get().getUsername(),
+    //                 existingMHP.get().getEmail(),
+    //                 existingMHP.get().getRole());
+
+    //         return ResponseEntity.ok("Bearer " + token);
+    //     }
+    //     return ResponseEntity.status(401).body("Invalid email or password");
+    // }
 
 //    @PostMapping("/login")
 //    public String loginUser(@RequestBody Map<String, String> requestBody) {
