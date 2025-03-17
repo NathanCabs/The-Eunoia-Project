@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/login/**", "/api/register/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/users/**").authenticated()
                         .requestMatchers("/api/professionals/recommended").authenticated()
-                        .requestMatchers("/api/posts/**").authenticated()
+                        .requestMatchers("/api/posts/**").permitAll()
                         .requestMatchers("/api/comments/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/professionals/**").authenticated()
                         .requestMatchers("/api/bookings/user").authenticated()

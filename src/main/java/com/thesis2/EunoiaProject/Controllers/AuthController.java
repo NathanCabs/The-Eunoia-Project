@@ -51,6 +51,26 @@ public class AuthController {
     }
 
     //PROFESSIONAL LOGIN
+
+    // @PostMapping("/login/professional")
+    // public ResponseEntity<Map<String, String>> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
+    //     Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
+
+    //     if (existingMHP.isPresent()) {
+    //         String token = jwtUtil.generateToken(
+    //                 existingMHP.get().getUsername(),
+    //                 existingMHP.get().getEmail(),
+    //                 existingMHP.get().getRole());
+
+    //                 Map<String, String> response = new HashMap<>();
+    //                 response.put("token", token);
+    //                 response.put("userId", String.valueOf(existingMHP.get().getId())); // Optional
+    //                 response.put("role", existingMHP.get().getRole());
+        
+    //                 return ResponseEntity.ok(response);
+    //     }
+    //     return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
+    // }
     @PostMapping("/login/professional")
     public ResponseEntity<String> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
         Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
