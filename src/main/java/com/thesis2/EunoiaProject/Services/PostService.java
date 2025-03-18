@@ -134,21 +134,49 @@ public class PostService {
         }
     }
 
-    // ✅ Like Post
-    public void likePost(int postId) {
-        Optional<Post> post = postRepository.findById(postId);
-        post.ifPresent(p -> {
-            p.likePost();
-            postRepository.save(p);
-        });
+    // ✅ Like Post: add the user to the likedBy set if not already present.
+    public void likePost(int postId, String email) {
+        Optional<Post> postOpt = postRepository.findById(postId);
+        if (postOpt.isPresent()) {
+            Post post = postOpt.get();
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            if (!post.getLikedBy().contains(user)) {
+                post.addLike(user);
+                postRepository.save(post);
+            }
+        }
     }
 
-    // ✅ Unlike Post
-    public void unlikePost(int postId) {
-        Optional<Post> post = postRepository.findById(postId);
-        post.ifPresent(p -> {
-            p.unlikePost();
-            postRepository.save(p);
-        });
+    // ✅ Unlike Post: remove the user from the likedBy set if present.
+    public void unlikePost(int postId, String email) {
+        Optional<Post> postOpt = postRepository.findById(postId);
+        if (postOpt.isPresent()) {
+            Post post = postOpt.get();
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            if (post.getLikedBy().contains(user)) {
+                post.removeLike(user);
+                postRepository.save(post);
+            }
+        }
     }
+
+    // // ✅ Like Post
+    // public void likePost(int postId) {
+    //     Optional<Post> post = postRepository.findById(postId);
+    //     post.ifPresent(p -> {
+    //         p.likePost();
+    //         postRepository.save(p);
+    //     });
+    // }
+
+    // // ✅ Unlike Post
+    // public void unlikePost(int postId) {
+    //     Optional<Post> post = postRepository.findById(postId);
+    //     post.ifPresent(p -> {
+    //         p.unlikePost();
+    //         postRepository.save(p);
+    //     });
+    // }
 }

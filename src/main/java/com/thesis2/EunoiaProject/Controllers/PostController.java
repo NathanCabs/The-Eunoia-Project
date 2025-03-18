@@ -180,17 +180,19 @@ public class PostController {
     //     }
     // }
 
-    // ✅ Like post (Users and Admins)
+    // ✅ Like post endpoint now uses Authentication
     @PostMapping("/{postId}/like")
-    public ResponseEntity<Void> likePost(@PathVariable int postId) {
-        postService.likePost(postId);
+    public ResponseEntity<Void> likePost(@PathVariable int postId, Authentication auth) {
+        String email = auth.getName();
+        postService.likePost(postId, email);
         return ResponseEntity.ok().build();
     }
 
-    // ✅ Unlike post (Users and Admins)
+    // ✅ Unlike post endpoint now uses Authentication
     @PostMapping("/{postId}/unlike")
-    public ResponseEntity<Void> unlikePost(@PathVariable int postId) {
-        postService.unlikePost(postId);
+    public ResponseEntity<Void> unlikePost(@PathVariable int postId, Authentication auth) {
+        String email = auth.getName();
+        postService.unlikePost(postId, email);
         return ResponseEntity.ok().build();
     }
 }

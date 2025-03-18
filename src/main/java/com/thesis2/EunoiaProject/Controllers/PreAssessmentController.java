@@ -3,6 +3,10 @@ package com.thesis2.EunoiaProject.Controllers;
 
 import com.thesis2.EunoiaProject.DTO.PreAssessmentRequest;
 import com.thesis2.EunoiaProject.Services.PreAssessmentService;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -52,13 +56,28 @@ public class PreAssessmentController {
 //}
 
     @PostMapping("/submit")
-    public ResponseEntity<String> submitPreAssessment(@RequestBody PreAssessmentRequest request, Authentication auth) {
+    public ResponseEntity<Map<String, String>> submitPreAssessment(
+            @RequestBody PreAssessmentRequest request,
+            Authentication auth) {
         String email = auth.getName();
-
         String recommendedProfessional = preAssessmentService.submitPreAssessment(request, email);
 
-        return ResponseEntity.ok("Recommended Professional: " + recommendedProfessional);
+        // Return a JSON object like {"recommendedProfessional": "Anxiety Specialist"}
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("recommendedProfessional", recommendedProfessional);
+
+        return ResponseEntity.ok(responseBody);
     }
+
+
+    // @PostMapping("/submit")
+    // public ResponseEntity<String> submitPreAssessment(@RequestBody PreAssessmentRequest request, Authentication auth) {
+    //     String email = auth.getName();
+
+    //     String recommendedProfessional = preAssessmentService.submitPreAssessment(request, email);
+
+    //     return ResponseEntity.ok("Recommended Professional: " + recommendedProfessional);
+    // }
 
 
 }

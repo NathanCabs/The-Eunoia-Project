@@ -49,7 +49,7 @@ public class MentalHealthProfessionalsController {
     }
 
     @GetMapping("/recommended")
-    public ResponseEntity<List<MentalHealthProfessionals>> getRecommended(@RequestBody MentalHealthProfessionals professional) {
+    public ResponseEntity<List<MentalHealthProfessionals>> getRecommended() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String loggedInEmail = auth.getName();
 

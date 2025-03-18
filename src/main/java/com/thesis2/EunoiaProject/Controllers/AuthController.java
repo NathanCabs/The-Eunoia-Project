@@ -72,26 +72,28 @@ public class AuthController {
     //     return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
     // }
 
+    // PROFESSIONAL LOGIN
     @PostMapping("/login/professional")
     public ResponseEntity<Map<String, String>> loginProfessional(@RequestBody MentalHealthProfessionals mentalHealthProfessionals) {
-    Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
-    
-    // Optionally check the password as well
-    if (existingMHP.isPresent() && existingMHP.get().getPassword().equals(mentalHealthProfessionals.getPassword())) {
-        String token = jwtUtil.generateToken(
-                existingMHP.get().getUsername(),
-                existingMHP.get().getEmail(),
-                existingMHP.get().getRole());
-                
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        response.put("userId", String.valueOf(existingMHP.get().getId()));
-        response.put("role", existingMHP.get().getRole());
-        return ResponseEntity.ok(response);
+        Optional<MentalHealthProfessionals> existingMHP = MHPRepo.findByEmail(mentalHealthProfessionals.getEmail());
+
+        if (existingMHP.isPresent() && existingMHP.get().getPassword().equals(mentalHealthProfessionals.getPassword())) {
+            String token = jwtUtil.generateToken(
+                    existingMHP.get().getUsername(),
+                    existingMHP.get().getEmail(),
+                    existingMHP.get().getRole());
+
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            response.put("userId", String.valueOf(existingMHP.get().getId()));
+            response.put("role", existingMHP.get().getRole());
+            // Extra details for professionals
+            response.put("username", existingMHP.get().getUsername());
+            response.put("userEmail", existingMHP.get().getEmail());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
     }
-    
-    return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
-}
 
 
     // @PostMapping("/login/professional")
@@ -149,12 +151,13 @@ public class AuthController {
                     existingUser.get().getEmail(),
                     existingUser.get().getRole());
 
-            // ✅ Return JSON object instead of plain string
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
-            response.put("userId", String.valueOf(existingUser.get().getId())); // Optional
+            response.put("userId", String.valueOf(existingUser.get().getId()));
             response.put("role", existingUser.get().getRole());
-
+            // Extra details for regular users
+            response.put("username", existingUser.get().getUsername());
+            response.put("userEmail", existingUser.get().getEmail());
             return ResponseEntity.ok(response);
         }
 
