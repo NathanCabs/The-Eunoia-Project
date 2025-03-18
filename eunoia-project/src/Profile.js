@@ -1,23 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import NavigationBar from './NavigationBar';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import api from './Axios';
 
 function Profile() {
-  const initialProfile = {
-    username: localStorage.getItem("username") || "",
-    email: localStorage.getItem("userEmail") || "",
-    password: localStorage.getItem("password") || ""
-  };
-
-  const [profile, setProfile] = useState(initialProfile);
+  const [profile, setProfile] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
 
+  // Fetch profile from backend GET /api/users/profile
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await api.get("/api/users/profile", {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        }
+      });
+      setProfile(response.data);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      alert("Error fetching profile information.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setProfile({
-      username: localStorage.getItem("username") || "",
-      email: localStorage.getItem("userEmail") || "",
-      password: localStorage.getItem("password") || ""
-    });
+    fetchProfile();
   }, []);
 
   const handleChange = (e) => {
@@ -25,23 +40,44 @@ function Profile() {
     setProfile(prev => ({ ...prev, [name]: value }));
   };
 
-  // Save changes (this would call your backend endpoint to update the profile)
   const handleSave = async (e) => {
     e.preventDefault();
-    // Assume a PUT request to /api/users/profile/update
-    // On success, update localStorage accordingly
-    // For demonstration, we'll just update localStorage directly:
-    localStorage.setItem("username", profile.username);
-    localStorage.setItem("userEmail", profile.email);
-    localStorage.setItem("password", profile.password);
-    alert("Profile updated successfully.");
-    setEditing(false);
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await api.put("/api/users/profile/update", profile, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        }
+      });
+      if (response.status === 200) {
+        alert("Profile updated successfully.");
+        setEditing(false);
+        fetchProfile();
+      } else {
+        alert("Failed to update profile.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile: " + error.message);
+    }
   };
 
   const handleCancel = () => {
     setEditing(false);
-    setProfile(initialProfile);
+    fetchProfile();
   };
+
+  if (loading) {
+    return (
+      <div>
+        <NavigationBar />
+        <Container className="mt-4">
+          <p>Loading profile...</p>
+        </Container>
+      </div>
+    );
+  }
 
   return (
     <div>

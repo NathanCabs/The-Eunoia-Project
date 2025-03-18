@@ -62,7 +62,7 @@ function Login() {
         localStorage.setItem("role", result.role);
         localStorage.setItem("username", result.username);
         localStorage.setItem("userEmail", result.userEmail);
-
+        localStorage.setItem("password", result.password);
       } else {
         throw new Error("No token received from server.");
       }

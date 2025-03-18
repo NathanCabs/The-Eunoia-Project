@@ -32,8 +32,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                 }
             } else {
                 const response = await api.post("http://localhost:6543/api/posts/create", {
-                    user: { id: userId },
-                    content,
+                    content
                   });
     
                 const newPost = await response.data;
