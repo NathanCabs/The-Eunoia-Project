@@ -129,6 +129,7 @@ public class Post {
     public Post(User user, String content) {
         this.user = user;
         this.content = content;
+        this.likedBy = new HashSet<>(); 
     }
 
     // 👍 Like a post by adding a user

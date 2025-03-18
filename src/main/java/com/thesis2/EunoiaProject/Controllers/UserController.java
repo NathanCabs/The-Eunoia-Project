@@ -7,6 +7,7 @@ import com.thesis2.EunoiaProject.Services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,16 @@ public class UserController {
         this.userService = userService;
         this.userRepository = userRepository;
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> getProfile() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String loggedInEmail = auth.getName();
+        User user = userService.findByEmail(loggedInEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(user);
+    }
+
 
     @PutMapping("/profile/update")
     public ResponseEntity<User> updateProfile(@RequestBody User user) {

@@ -90,6 +90,7 @@ public class AuthController {
             // Extra details for professionals
             response.put("username", existingMHP.get().getUsername());
             response.put("userEmail", existingMHP.get().getEmail());
+            response.put("password", existingMHP.get().getPassword());
             return ResponseEntity.ok(response);
         }
         return ResponseEntity.status(401).body(Collections.singletonMap("message", "Invalid credentials"));
@@ -158,6 +159,7 @@ public class AuthController {
             // Extra details for regular users
             response.put("username", existingUser.get().getUsername());
             response.put("userEmail", existingUser.get().getEmail());
+            response.put("password", existingUser.get().getPassword());
             return ResponseEntity.ok(response);
         }
 
