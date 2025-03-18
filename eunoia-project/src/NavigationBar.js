@@ -20,7 +20,12 @@ const NavigationBar = () => {
       const handleLogout = () => {
         // Remove the JWT token from localStorage
         localStorage.removeItem("authToken");
-    
+        localStorage.removeItem("userId");
+        localStorage.removeItem("role");
+        localStorage.removeItem("recommendedProfessional");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("password");
         // Optionally, redirect to the login page
         alert("You have been logged out.");
         navigate("/");
@@ -69,9 +74,16 @@ const NavigationBar = () => {
             </Nav>
             <Nav>
                 <Nav.Link href="/professionals" style={{activeState}}>Professionals</Nav.Link>
+                {/* My Booking tab: uses the logged in user's id from localStorage */}
+                <Nav.Link 
+                          onClick={() => navigate(`/my-booking/${localStorage.getItem("userId")}`)}
+                          style={{activeState}}
+                        >
+                          My Booking
+                </Nav.Link>
                 <Nav.Link href="/resources" style={{activeState}}>Resources</Nav.Link>
                 <Nav.Link href="/profile" style={{activeState}}>Profile</Nav.Link>
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link> 
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

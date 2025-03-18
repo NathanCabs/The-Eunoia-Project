@@ -5,23 +5,17 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './Axios';
 import Comment from './Comment';
 import AddComment from './AddComment';
 import PostForm from './CreatePost';
+import LikePost from './LikePost';
 
 function Home() {
 
     const [posts, setPosts] = useState([]);
     const [editingPost, setEditingPost] = useState(null);
-    const token = localStorage.getItem("authToken");
     const userId = localStorage.getItem('userId');
-    
-    // Create a current user object from localStorage
-    const currentUser = {
-      id: localStorage.getItem("userId"),
-      username: localStorage.getItem("username"),
-    };
 
       useEffect(() => {
           fetchPosts();
@@ -29,12 +23,8 @@ function Home() {
   
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:6543/api/posts", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", },
-            withCredentials: true,
-        });
+        const response = await api.get("http://localhost:6543/api/posts",);
+        console.log("Post response data:", response.data);
         const sortedPosts = response.data.sort((a, b) => b.likes - a.likes);
         setPosts(sortedPosts);
       } catch (err) {
@@ -44,11 +34,7 @@ function Home() {
 
     const handleDelete = async (postId) => {
         try {
-          await axios.delete(`http://localhost:6543/api/posts/${postId}/delete`, {
-            headers: { Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", },
-            withCredentials: true,
-          });
+          await api.delete(`http://localhost:6543/api/posts/${postId}/delete`,);
           alert("Post deleted successfully!");
           fetchPosts();
         } catch (error) {
@@ -103,9 +89,7 @@ function Home() {
                    {/* ✅ Add Like/Unlike Button */}
                    <div>
                       <p>{post.likes} Likes</p>
-                          <button>
-                            👍 Like
-                          </button>
+                      <LikePost postId={post.id} likedBy={post.likedBy} refreshPost={fetchPosts} />
                     </div>
                     <br></br>
                     {/* ✅ AddComment Component */}

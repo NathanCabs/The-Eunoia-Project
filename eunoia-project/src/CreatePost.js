@@ -4,7 +4,7 @@ import './Login.css';
 // import Row from 'react-bootstrap/Row';
 // import Col from 'react-bootstrap/Col';
 import React, { useState } from 'react';
- import axios from 'axios';
+import api from './Axios';
 
 const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
     const [content, setContent] = useState(post ? post.content : "");
@@ -23,26 +23,18 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
 
         try {
             if (post){
-                await axios.put(`http://localhost:6543/api/posts/${post.id}/update`,{ 
-                    content },
-                    { headers: { 
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    } }
-                  );
+                await api.put(`http://localhost:6543/api/posts/${post.id}/update`,
+                    { content });
                 alert("Post updated successfully!");
                 cancelEdit();
                 if (refreshPosts) {
                     refreshPosts(); // ✅ Only call if it's defined
                 }
             } else {
-                const response = await axios.post("http://localhost:6543/api/posts/create", {
+                const response = await api.post("http://localhost:6543/api/posts/create", {
                     user: { id: userId },
                     content,
-                  }, {
-                    headers: { Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json" 
-                }});
+                  });
     
                 const newPost = await response.data;
                 console.log("Post created:", newPost);

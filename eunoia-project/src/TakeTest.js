@@ -1,7 +1,7 @@
 import './Login.css';
+import { Link } from 'react-router-dom';
 
 function TakeTest() {
-
   return (
     <center>
     <div className="container-md" style={{alignContent:"center", display:"grid", minHeight:"90vh"}}>
@@ -12,9 +12,7 @@ function TakeTest() {
             Take a short test in order to be grouped with people with similar experiences/conditions.
         </p>
         <div>
-            <a href="#" className="text-sm/6 font-semibold text-gray-900">
-                Take Assessment <span aria-hidden="true">→</span>
-            </a>
+            <Link to="/test">Take Assessment<span aria-hidden="true">→</span></Link>
         </div>
     </div>
     </center>

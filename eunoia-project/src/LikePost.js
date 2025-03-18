@@ -1,29 +1,39 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import api from './Axios';
 
-const LikePost = ({ postId }) => {
-  const handleLike = async () => {
-    try {
-      await axios.post(`/api/posts/${postId}/like`);
-      console.log('Post liked');
-    } catch (err) {
-      console.error('Error liking post');
+const LikePost = ({ postId, likedBy, refreshPost }) => {
+  const userId = localStorage.getItem('userId');
+  const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    if (likedBy && Array.isArray(likedBy)) {
+      // Assume likedBy is an array of user objects with an "id" property
+      setLiked(likedBy.some(user => user.id === Number(userId)));
     }
-  };
+  }, [likedBy, userId]);
 
-  const handleUnlike = async () => {
+  const handleLikeToggle = async () => {
     try {
-      await axios.post(`/api/posts/${postId}/unlike`);
-      console.log('Post unliked');
+      if (liked) {
+        await api.post(`http://localhost:6543/api/posts/${postId}/unlike`);
+        setLiked(false);
+      } else {
+        await api.post(`http://localhost:6543/api/posts/${postId}/like`);
+        setLiked(true);
+      }
+      if (refreshPost) {
+        refreshPost(); // Optionally refresh the parent component data
+      }
     } catch (err) {
-      console.error('Error unliking post');
+      console.error('Error toggling like', err);
     }
   };
 
   return (
     <div>
-      <button onClick={handleLike}>Like</button>
-      <button onClick={handleUnlike}>Unlike</button>
+      <button onClick={handleLikeToggle}>
+        {liked ? 'Unlike' : 'Like'}
+      </button>
     </div>
   );
 };

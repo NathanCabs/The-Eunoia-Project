@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from './Axios';
 
 const AddComment = ({ postId, comment = null, onCommentAdded, onCancel }) => {
     const [content, setContent] = useState(comment ? comment.content : "");
@@ -9,26 +9,17 @@ const AddComment = ({ postId, comment = null, onCommentAdded, onCancel }) => {
         e.preventDefault();
         setError("");
 
-        const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
 
         try {
             if (comment) {
                 // Update existing comment
-                await axios.put(`http://localhost:6543/api/comments/update/${comment.id}`, 
-                    { userId, content },
-                    { headers: { Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json", },
-                    withCredentials: true,
-                    });
+                await api.put(`http://localhost:6543/api/comments/update/${comment.id}`, 
+                    { userId, content });
             } else {
                 // Create new comment
-                await axios.post(`http://localhost:6543/api/comments/add`, 
-                    { postId, userId, content },
-                    { headers: { Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json", },
-                    withCredentials: true, 
-                    });
+                await api.post(`http://localhost:6543/api/comments/add`, 
+                    { postId, userId, content });
             }
 
             setContent("");

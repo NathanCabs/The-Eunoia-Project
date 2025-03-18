@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from './Axios';
 import AddComment from './AddComment';
 
-const CommentList = ({ postId, showAll = false }) => {
+const Comment = ({ postId, showAll = false }) => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingComment, setEditingComment] = useState(null);
-    const token = localStorage.getItem('authToken');
 
     useEffect(() => {
         fetchComments();
@@ -14,12 +13,8 @@ const CommentList = ({ postId, showAll = false }) => {
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`http://localhost:6543/api/comments/post/${postId}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json", },
-              withCredentials: true,
-          });
+            const response = await api.get(`http://localhost:6543/api/comments/post/${postId}`);
+            console.log("Comment response data:", response.data);
             setComments(response.data);
             setLoading(false);
         } catch (err) {
@@ -30,11 +25,7 @@ const CommentList = ({ postId, showAll = false }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            await axios.delete(`http://localhost:6543/api/comments/delete/${commentId}`, {
-                headers: { Authorization: `Bearer ${token}')}`,
-                "Content-Type": "application/json", },
-                withCredentials: true,
-                });
+            await api.delete(`http://localhost:6543/api/comments/delete/${commentId}`);
             setComments(comments.filter(comment => comment.id !== commentId));
         } catch (err) {
             console.error("Failed to delete comment:", err);
@@ -86,4 +77,4 @@ const CommentList = ({ postId, showAll = false }) => {
     );
 };
 
-export default CommentList;
+export default Comment;

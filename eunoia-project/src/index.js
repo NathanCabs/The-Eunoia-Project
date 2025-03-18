@@ -11,7 +11,6 @@ import Home from './Home';
 import Professionals from './Professionals';
 import Profile from './Profile';
 import Resources from './Resources';
-import Message from './Message';
 import CreatePost from './CreatePost';
 import Admin from './Admin';
 import ForgotPass from './ForgotPass';
@@ -19,6 +18,9 @@ import reportWebVitals from './reportWebVitals';
 import PostDetail from './PostDetail';
 import ProfessionalDetail from './ProfessionalDetail';
 import AddComment from './AddComment';
+import ProfessionalBooking from './ProfessionalBooking';
+import ProfessionalProfile from './ProfessionalProfile';
+import MyBooking from './MyBooking';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -33,12 +35,14 @@ root.render(
         <Route path="/professionals" element={<Professionals />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/resources" element={<Resources />} />
-        <Route path="/message" element={<Message />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/forgot_password" element={<ForgotPass />} />
-        <Route path="/professional_detail" element={<ProfessionalDetail />} />
+        <Route path="/professional-detail/:id" element={<ProfessionalDetail />} />
         <Route path="/post/:postId" element={<PostDetail />} />
         <Route path="/add" element={<AddComment />} />
+        <Route path="/professional-booking/" element={<ProfessionalBooking />} />
+        <Route path="/professional-profile/" element={<ProfessionalProfile />} />
+        <Route path="/my-booking/:id" element={<MyBooking />} />
       </Routes>
     </BrowserRouter>
 );
