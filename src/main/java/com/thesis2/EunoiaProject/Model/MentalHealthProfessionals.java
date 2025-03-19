@@ -3,6 +3,8 @@ package com.thesis2.EunoiaProject.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "mental_health_professionals")
 public class MentalHealthProfessionals {
@@ -38,8 +40,10 @@ public class MentalHealthProfessionals {
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
-    private String availability;
+//    @Column(nullable = false)
+//    private String availability;
+    @Column(nullable = true)
+    private LocalDate availability;
 
     @Column(nullable = false)
     private double rating;
@@ -120,11 +124,11 @@ public class MentalHealthProfessionals {
         this.location = location;
     }
 
-    public String getAvailability() {
+    public LocalDate getAvailability() {
         return availability;
     }
 
-    public void setAvailability(String availability) {
+    public void setAvailability(LocalDate availability) {
         this.availability = availability;
     }
 
@@ -152,4 +156,3 @@ public class MentalHealthProfessionals {
         this.username = username;
     }
 }
-

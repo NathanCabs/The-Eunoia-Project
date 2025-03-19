@@ -38,7 +38,9 @@ public class MentalHealthProfessionalsService {
         professional.setYearsOfExperience(0);
         professional.setQualification("Not specified");
         professional.setLocation("Not specified");
-        professional.setAvailability("Not specified");
+
+
+        professional.setAvailability(null);
         professional.setRating(0.0);
         professional.setRole("PROFESSIONAL");
 
