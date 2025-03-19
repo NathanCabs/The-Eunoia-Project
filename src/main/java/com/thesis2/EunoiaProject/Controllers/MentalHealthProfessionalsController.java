@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.View;
 
-import java.time.LocalDate;
+import java.time.DayOfWeek;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,6 +36,17 @@ public class MentalHealthProfessionalsController {
         this.repository = repository;
         this.userRepository = userRepository;
     }
+
+
+    @GetMapping("/{id}/availability")
+    public ResponseEntity<List<DayOfWeek>> getAvailability(@PathVariable int id) {
+        MentalHealthProfessionals professional = service.getProfessionalsById(id)
+                .orElseThrow(() -> new RuntimeException("Professional not found"));
+
+        return ResponseEntity.ok(professional.getAvailability());
+    }
+
+
 
     @GetMapping
     public ResponseEntity<List<MentalHealthProfessionals>> getAll() {
@@ -105,9 +116,13 @@ public class MentalHealthProfessionalsController {
         if (professional.getLocation() != null) {
             existingProfessional.setLocation(professional.getLocation());
         }
-        if (professional.getAvailability() != null) {
+//        if (professional.getAvailability() != null) {
+//            existingProfessional.setAvailability(professional.getAvailability());
+//        }
+        if(professional.getAvailability() != null){
             existingProfessional.setAvailability(professional.getAvailability());
         }
+
         if (professional.getEmail() != null && !professional.getEmail().equals(loggedInEmail)) {
             throw new IllegalArgumentException("Cannot update professional with different email");
         }

@@ -3,7 +3,9 @@ package com.thesis2.EunoiaProject.Model;
 
 import jakarta.persistence.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "mental_health_professionals")
@@ -40,10 +42,17 @@ public class MentalHealthProfessionals {
     @Column(nullable = false)
     private String location;
 
-//    @Column(nullable = false)
-//    private String availability;
-    @Column(nullable = true)
-    private LocalDate availability;
+////    @Column(nullable = false)
+////    private String availability;
+//    @Column(nullable = true)
+//    private LocalDate availability;
+
+    @ElementCollection(targetClass = DayOfWeek.class)
+    @CollectionTable(name = "professional_availability",
+    joinColumns = @JoinColumn(name = "professional_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "available_day")
+    private List<DayOfWeek> availability;
 
     @Column(nullable = false)
     private double rating;
@@ -124,11 +133,11 @@ public class MentalHealthProfessionals {
         this.location = location;
     }
 
-    public LocalDate getAvailability() {
+    public List<DayOfWeek> getAvailability() {
         return availability;
     }
 
-    public void setAvailability(LocalDate availability) {
+    public void setAvailability(List<DayOfWeek> availability) {
         this.availability = availability;
     }
 

@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/comments/**").authenticated()
                         // .requestMatchers("/api/comments/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/api/professionals/{id}/availability").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/pre-assessment/submit").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/professionals/**").authenticated()
                         .requestMatchers("/api/bookings/user").authenticated()
