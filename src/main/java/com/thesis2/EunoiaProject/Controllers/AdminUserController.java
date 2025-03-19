@@ -20,10 +20,10 @@ public class AdminUserController {
     }
 
     // ✅ Get all users (Admin only)
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        //List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     // ✅ Get user by ID

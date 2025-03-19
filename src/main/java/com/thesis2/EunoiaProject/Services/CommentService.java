@@ -71,6 +71,7 @@ import com.thesis2.EunoiaProject.Repository.CommentRepository;
 import com.thesis2.EunoiaProject.Repository.PostRepository;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class CommentService {
     }
 
     // ✅ Add a comment using authenticated user info
+    @Transactional
     public Comment addComment(int postId, String email, String content) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
@@ -100,17 +102,20 @@ public class CommentService {
     }
 
     // ✅ Get all comments for a specific post
+    @Transactional(readOnly = true)
     public List<Comment> getCommentsByPost(int postId) {
         return commentRepository.findByPostId(postId);
     }
 
     // ✅ Get comment by ID
+    @Transactional(readOnly = true)
     public Comment getCommentById(int commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
     }
 
     // ✅ Update comment (User can update their own; Admin can update any)
+    @Transactional
     public Comment updateComment(int commentId, String content, String email, boolean isAdmin) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
@@ -126,6 +131,7 @@ public class CommentService {
 
 
     // ✅ Delete comment (User can delete their own; Admin can delete any)
+    @Transactional
     public void deleteComment(int commentId, String email, boolean isAdmin) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Comment not found"));

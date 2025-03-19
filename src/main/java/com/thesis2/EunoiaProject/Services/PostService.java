@@ -75,6 +75,7 @@ import com.thesis2.EunoiaProject.Model.User;
 import com.thesis2.EunoiaProject.Repository.PostRepository;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +92,7 @@ public class PostService {
     }
 
     // ✅ Create Post
+    @Transactional
     public Post createPost(String email, String content) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -100,16 +102,19 @@ public class PostService {
     }
 
     // ✅ Get All Posts
+    @Transactional(readOnly = true)
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
     // ✅ Get Post by ID
+    @Transactional(readOnly = true)
     public Optional<Post> getPostById(int postId) {
         return postRepository.findById(postId);
     }
 
     // ✅ Update Post (User can update their own; Admin can update any post)
+    @Transactional
     public Post updatePost(int postId, String newContent, String email, boolean isAdmin) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
@@ -123,6 +128,7 @@ public class PostService {
     }
 
     // ✅ Delete Post (User can delete their own; Admin can delete any post)
+    @Transactional
     public void deletePost(int postId, String email, boolean isAdmin) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
@@ -135,6 +141,7 @@ public class PostService {
     }
 
     // ✅ Like Post: add the user to the likedBy set if not already present.
+    @Transactional
     public void likePost(int postId, String email) {
         Optional<Post> postOpt = postRepository.findById(postId);
         if (postOpt.isPresent()) {
@@ -149,6 +156,7 @@ public class PostService {
     }
 
     // ✅ Unlike Post: remove the user from the likedBy set if present.
+    @Transactional
     public void unlikePost(int postId, String email) {
         Optional<Post> postOpt = postRepository.findById(postId);
         if (postOpt.isPresent()) {

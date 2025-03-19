@@ -5,6 +5,7 @@ import com.thesis2.EunoiaProject.Model.MentalHealthProfessionals;
 import com.thesis2.EunoiaProject.Repository.MentalHealthProfessionalsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class MentalHealthProfessionalsService {
     }
 
     //Register Professional
+    @Transactional
     public String registerProfessional(MHPRegisterRequest registerRequest) {
         if (MHPRepository.findByEmail(registerRequest.getEmail()).isPresent()){
             return "Email Already Exists";
@@ -46,6 +48,7 @@ public class MentalHealthProfessionalsService {
     }
 
     //Login Professional
+    @Transactional
     public String loginProfessional(String email, String password) {
         Optional<MentalHealthProfessionals> professional = MHPRepository.findByEmail(email);
         if (professional.isPresent() && professional.get().getPassword().equals(password)) {
@@ -55,14 +58,17 @@ public class MentalHealthProfessionalsService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<MentalHealthProfessionals> getAllProfessionals(){
         return MHPRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Optional<MentalHealthProfessionals> findByEmail(String email){
         return MHPRepository.findByEmail(email);
     }
 
+    @Transactional(readOnly = true)
     public Optional<MentalHealthProfessionals> getProfessionalsById(int id){
         return MHPRepository.findById(id);
     }

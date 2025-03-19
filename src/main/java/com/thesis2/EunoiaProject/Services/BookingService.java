@@ -9,6 +9,7 @@ import com.thesis2.EunoiaProject.Repository.BookingRepository;
 import com.thesis2.EunoiaProject.Repository.MentalHealthProfessionalsRepository;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class BookingService {
         this.MHPrepo = MHPrepo;
     }
 
+    @Transactional
     public Booking createBooking(String userEmail, int professionalId, LocalDateTime bookingDateTime) {
 
         User user = userRepository.findByEmail(userEmail)
@@ -48,6 +50,7 @@ public class BookingService {
     }
 
     // ✅ Get User Bookings
+    @Transactional(readOnly = true)
     public List<Booking> getBookings(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -56,6 +59,7 @@ public class BookingService {
     }
 
     // ✅ Get Professional Bookings
+    @Transactional(readOnly = true)
     public List<Booking> getProfessionalBookings(String professionalEmail) {
         MentalHealthProfessionals professional = MHPrepo.findByEmail(professionalEmail)
                 .orElseThrow(() -> new RuntimeException("Professional not found"));
@@ -64,11 +68,13 @@ public class BookingService {
     }
 
     // ✅ Get All Bookings (Admin only)
+    @Transactional(readOnly = true)
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
     // ✅ Cancel Booking
+    @Transactional
     public void cancelBooking(int bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
@@ -78,6 +84,7 @@ public class BookingService {
     }
 
     // ✅ Cancel Booking
+    @Transactional
     public void confirmBooking(int bookingId, String email) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));

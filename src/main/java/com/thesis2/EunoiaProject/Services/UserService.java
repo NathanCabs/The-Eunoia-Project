@@ -5,6 +5,7 @@ import com.thesis2.EunoiaProject.Model.User;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ public class UserService {
     private UserRepository userRepository;
 
     // ✅ Register user
+    @Transactional
     public User registerUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent() ||
                 userRepository.findByUsername(user.getUsername()).isPresent()) {
@@ -30,27 +32,32 @@ public class UserService {
     }
 
     // ✅ Login user
+    @Transactional
     public Optional<User> loginUser(String email, String password) {
         return userRepository.findByEmail(email)
                 .filter(user -> user.getPassword().equals(password));
     }
 
     // ✅ Get user by ID
+    @Transactional(readOnly = true)
     public Optional<User> findById(int id) {
         return userRepository.findById(id);
     }
 
     // Get User by Email
+    @Transactional(readOnly = true)
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     // ✅ Get all users (Admin feature)
+    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     // ✅ Update user
+    @Transactional
     public User updateUser(int userId, User userRequest) {
         return userRepository.findById(userId).map(existingUser -> {
             existingUser.setUsername(userRequest.getUsername());
@@ -61,6 +68,7 @@ public class UserService {
     }
 
     // ✅ Delete user
+    @Transactional
     public boolean deleteUser(int userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);

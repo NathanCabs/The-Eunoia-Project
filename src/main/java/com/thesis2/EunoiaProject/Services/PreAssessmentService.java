@@ -5,6 +5,7 @@ import com.thesis2.EunoiaProject.Model.User;
 import com.thesis2.EunoiaProject.Repository.UserRepository;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class PreAssessmentService {
 //        throw new RuntimeException("Failed to get recommendation from Flask API Model");
 //
 //    }
+@Transactional
 public String submitPreAssessment(PreAssessmentRequest request, String email) {
     // 🔎 Step 1: Get the logged-in user
     User user = userRepository.findByEmail(email)
