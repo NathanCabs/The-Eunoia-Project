@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bookings")
+@CrossOrigin(origins = "https://eunoia.social")
 public class BookingController {
 
     private final BookingService bookingService;

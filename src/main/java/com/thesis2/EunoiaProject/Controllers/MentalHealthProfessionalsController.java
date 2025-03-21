@@ -19,7 +19,7 @@ import java.time.DayOfWeek;
 import java.util.Collections;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://eunoia.social")
 //ADMIN CONTROL OF THE PROFESSIONALS
 @RestController
 @RequestMapping("/api/professionals")

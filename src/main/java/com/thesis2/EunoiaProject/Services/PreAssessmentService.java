@@ -55,7 +55,7 @@ public String submitPreAssessment(PreAssessmentRequest request, String email) {
 
     try {
         // 🔎 Step 2: Send data to Flask API
-        String flaskUrl = "http://localhost:5000/predict";
+        String flaskUrl = " https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/predict";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
