@@ -1,18 +1,18 @@
-import './Login.css';
+import './Login.scss';
 import { Link } from 'react-router-dom';
 
 function TakeTest() {
   return (
-    <center>
-    <div className="container-md" style={{alignContent:"center", display:"grid", minHeight:"90vh"}}>
-        <h1>
+    <center className="homeBackground">
+    <div className="container-md homeBackground" style={{alignContent:"center", display:"grid", minHeight:"90vh", userSelect:"none"}}>
+        <h1 style={{fontFamily:"font2"}}>
             We'll have to learn more from you
         </h1>
-        <p>
-            Take a short test in order to be grouped with people with similar experiences/conditions.
+        <p style={{fontFamily:"font1", color:"#3056d5", marginTop:"10px", fontSize:"20px"}}>
+            Take a short pre-assessment form in order to be recommended<br></br> a type of doctor suited to your symptoms.
         </p>
         <div>
-            <Link to="/test">Take Assessment<span aria-hidden="true">→</span></Link>
+            <Link className="registerButton" to="/test" style={{alignContent:"center"}}>Take Assessment<span aria-hidden="true">➔</span></Link>
         </div>
     </div>
     </center>

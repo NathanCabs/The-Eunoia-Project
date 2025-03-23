@@ -1,6 +1,6 @@
-import './Login.css';
+import './Login.scss';
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Nav, Table } from 'react-bootstrap';
+import { Container, Row, Col, Nav, Table, Button, Modal } from 'react-bootstrap';
 import api from './Axios';
 import NavigationBar from './NavigationBar';
 
@@ -11,6 +11,8 @@ function Admin() {
   const [users, setUsers] = useState([]);
   const [professionals, setProfessionals] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   // States for loading & errors
   const [loading, setLoading] = useState(false);
@@ -22,24 +24,44 @@ function Admin() {
     setError("");
     const token = localStorage.getItem("authToken");
     try {
-      const response = await fetch("/api/admin/users", {
+      const response = await api.get("/api/admin/users/all", {
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Authorization": `Bearer ${token}`
         }
       });
-      if (!response.ok) {
-        throw new Error(`Error fetching users: ${response.status}`);
-      }
-      const data = await response.json();
-      setUsers(data);
+      setUsers(response.data);
     } catch (err) {
-      console.error("Error fetching users:", err);
-      setError(err.message || "An error occurred while fetching users.");
+      console.error("Error fetching professionals:", err);
+      setError(err.message || "An error occurred while fetching professionals.");
     } finally {
       setLoading(false);
     }
   };
+
+  // const fetchUsers = async () => {
+  //   setLoading(true);
+  //   setError("");
+  //   const token = localStorage.getItem("authToken");
+  //   try {
+  //     const response = await fetch("/api/admin/users", {
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       }
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`Error fetching users: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     setUsers(data);
+  //   } catch (err) {
+  //     console.error("Error fetching users:", err);
+  //     setError(err.message || "An error occurred while fetching users.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  
 
   // Fetch Professionals
   const fetchProfessionals = async () => {
@@ -93,6 +115,30 @@ function Admin() {
   }, [activeTab]);
 
   // Handler for deleting a professional
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
+    const token = localStorage.getItem("authToken");
+    try {
+      const response = await api.delete(`/api/admin/users/${userId}/delete`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (response.status === 204) {
+        alert("User deleted successfully!");
+        fetchUsers();
+      } else {
+        alert("Failed to delete user.");
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Error deleting user: " + error.message);
+    }
+  };
+
+  // Handler for deleting a professional
   const handleDeleteProfessional = async (professionalId) => {
     if (!window.confirm("Are you sure you want to delete this professional?")) {
       return;
@@ -104,7 +150,7 @@ function Admin() {
           "Authorization": `Bearer ${token}`
         }
       });
-      if (response.status === 200) {
+      if (response.status === 204) {
         alert("Professional deleted successfully!");
         fetchProfessionals();
       } else {
@@ -116,6 +162,39 @@ function Admin() {
     }
   };
 
+  const handleCancelClick = (booking) => {
+    setSelectedBooking(booking);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!selectedBooking) return;
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+      // Assuming a successful deletion returns HTTP 204 or 200
+      if (response.status === 204 || response.status === 200) {
+        alert("Booking cancelled successfully!");
+        setShowConfirmModal(false);
+        fetchBookings();
+      } else {
+        alert("Failed to cancel booking.");
+      }
+    } catch (err) {
+      console.error("Error cancelling booking:", err);
+      alert("An error occurred while cancelling the booking.");
+    }
+  };
+
+    const handleCloseModal = () => {
+      setShowConfirmModal(false);
+      setSelectedBooking(null);
+    };
+
   // Table rendering functions
   const renderUsersTable = () => (
     <Table bordered hover>
@@ -124,6 +203,7 @@ function Admin() {
           <th>#</th>
           <th>Email</th>
           <th>Username</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -132,6 +212,11 @@ function Admin() {
             <td>{idx + 1}</td>
             <td>{user.email}</td>
             <td>{user.username}</td>
+            <td>
+              <button onClick={() => handleDeleteUser(user.id)}>
+                Delete
+              </button>
+            </td>
           </tr>
         ))}
       </tbody>
@@ -167,7 +252,7 @@ function Admin() {
             <td>{pro.yearsOfExperience}</td>
             <td>{pro.qualification}</td>
             <td>{pro.location}</td>
-            <td>{pro.availability}</td>
+            <td>{pro.availability + " "}</td>
             <td>
               <button onClick={() => handleDeleteProfessional(pro.id)}>
                 Delete
@@ -181,31 +266,6 @@ function Admin() {
 
   const renderBookingsTable = () => (
     <>
-      <h4>Pending Bookings</h4>
-      <Table bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>User</th>
-            <th>Professional</th>
-            <th>Date/Time</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings
-            .filter(b => b.status === "PENDING")
-            .map((booking, idx) => (
-              <tr key={booking.id}>
-                <td>{idx + 1}</td>
-                <td>{booking.user?.username}</td>
-                <td>{booking.professional?.name}</td>
-                <td>{new Date(booking.bookDateTime).toLocaleString()}</td>
-                <td>{booking.status}</td>
-              </tr>
-          ))}
-        </tbody>
-      </Table>
       <h4>Confirmed Bookings</h4>
       <Table bordered hover>
         <thead>
@@ -215,6 +275,7 @@ function Admin() {
             <th>Professional</th>
             <th>Date/Time</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -227,6 +288,42 @@ function Admin() {
                 <td>{booking.professional?.name}</td>
                 <td>{new Date(booking.bookDateTime).toLocaleString()}</td>
                 <td>{booking.status}</td>
+                <td>
+                <Button variant="danger" onClick={() => handleCancelClick(booking)}>
+                      Cancel
+                    </Button>
+                </td>
+              </tr>
+          ))}
+        </tbody>
+      </Table>
+      <h4>Pending Bookings</h4>
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Professional</th>
+            <th>Date/Time</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings
+            .filter(b => b.status === "PENDING")
+            .map((booking, idx) => (
+              <tr key={booking.id}>
+                <td>{idx + 1}</td>
+                <td>{booking.user?.username}</td>
+                <td>{booking.professional?.name}</td>
+                <td>{new Date(booking.bookDateTime).toLocaleString()}</td>
+                <td>{booking.status}</td>
+                <td>
+                    <Button variant="danger" onClick={() => handleCancelClick(booking)}>
+                      Cancel
+                    </Button>
+                </td>
               </tr>
           ))}
         </tbody>
@@ -269,6 +366,24 @@ function Admin() {
         </Col>
       </Row>
     </Container>
+
+    {/* Confirm Cancellation Modal */}
+    <Modal show={showConfirmModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Cancellation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to cancel this booking?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            No, keep it
+          </Button>
+          <Button variant="danger" onClick={handleConfirmCancel}>
+            Yes, cancel it
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

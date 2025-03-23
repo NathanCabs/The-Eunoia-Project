@@ -18,7 +18,7 @@ const ProfessionalBooking = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.get("http://localhost:6543/api/bookings/professional", {
+      const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/professional", {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -40,7 +40,7 @@ const ProfessionalBooking = () => {
   const handleConfirm = async (bookingId) => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.put(`http://localhost:6543/api/bookings/confirm/${bookingId}`, {}, {
+      const response = await api.put(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/confirm/${bookingId}`, {}, {
         headers: {
           "Authorization": "Bearer " + token
         }
@@ -66,7 +66,7 @@ const ProfessionalBooking = () => {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }

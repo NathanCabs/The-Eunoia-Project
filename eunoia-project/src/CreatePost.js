@@ -1,4 +1,4 @@
-import './Login.css';
+import './Login.scss';
 // import NavigationBar from './NavigationBar';
 // import Container from 'react-bootstrap/Container';
 // import Row from 'react-bootstrap/Row';
@@ -23,7 +23,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
 
         try {
             if (post){
-                await api.put(`http://localhost:6543/api/posts/${post.id}/update`,
+                await api.put(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${post.id}/update`,
                     { content });
                 alert("Post updated successfully!");
                 cancelEdit();
@@ -31,7 +31,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                     refreshPosts(); // ✅ Only call if it's defined
                 }
             } else {
-                const response = await api.post("http://localhost:6543/api/posts/create", {
+                const response = await api.post("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/create", {
                     content
                   });
     
@@ -55,11 +55,12 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                 <div>
                     <div>
                         <textarea
+                            className="createPostInput"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder={post ? "Edit Post" : "What's on your mind?"}
                             required
-                            style={{ width: "100%", minHeight: "50px", resize: "none", overflowY: "hidden" }}
+                            style={{ minHeight: "60px", resize: "none", overflowY: "hidden", fontFamily:"font1"}}
                             rows={1}
                             onInput={(e) => {
                                 e.target.style.height = "auto"; // Reset height
@@ -70,8 +71,8 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                 </div>
                 <div>
-                    {post && <button type="button" onClick={cancelEdit}>Cancel</button>}
-                    <button type="submit">{post ? "Done" : "Post"}</button>
+                    {post && <button type="button" onClick={cancelEdit} className="registerButton">Cancel</button>}
+                    <button type="submit" className="registerButton" style={{width:"20%"}}>{post ? "Done" : "Post"}</button>
                 </div>
             </form>
         </div>

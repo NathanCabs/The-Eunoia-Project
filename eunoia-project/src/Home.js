@@ -1,4 +1,4 @@
-import './Login.css';
+import './Login.scss';
 import NavigationBar from './NavigationBar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,6 +16,12 @@ function Home() {
     const [posts, setPosts] = useState([]);
     const [editingPost, setEditingPost] = useState(null);
     const userId = localStorage.getItem('userId');
+    const role = localStorage.getItem('role');
+    const [commentRefreshTrigger, setCommentRefreshTrigger] = useState(0);
+
+    const handleCommentAdded = () => {
+        setCommentRefreshTrigger(prev => prev + 1); // Changing this will trigger a re-render
+    };
 
       useEffect(() => {
           fetchPosts();
@@ -23,7 +29,7 @@ function Home() {
   
     const fetchPosts = async () => {
       try {
-        const response = await api.get("http://localhost:6543/api/posts",);
+        const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts",);
         console.log("Post response data:", response.data);
         const sortedPosts = response.data.sort((a, b) => b.likes - a.likes);
         setPosts(sortedPosts);
@@ -34,7 +40,7 @@ function Home() {
 
     const handleDelete = async (postId) => {
         try {
-          await api.delete(`http://localhost:6543/api/posts/${postId}/delete`,);
+          await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/delete`,);
           alert("Post deleted successfully!");
           fetchPosts();
         } catch (error) {
@@ -57,45 +63,50 @@ function Home() {
       };
     
     return (
-      <div fluid>
+      <div className="homeBackground" fluid>
         <NavigationBar />
         <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
           <Row>
             <Col style={{ paddingBottom: "1.5rem" }}>
-              <h1>Home</h1>
               <PostForm refreshPosts={fetchPosts}/>
             </Col>
           </Row>
           {posts.length > 0 ? (
             posts.map((post) => (
-              <Row key={post.id} style={{ backgroundColor: "#282c34", padding: "10px", borderRadius: "30px", marginBottom: "1rem" }}>
-                <Col style={{ backgroundColor: "#787878", padding: "15px 30px", borderRadius: "25px" }}>
+              <Row key={post.id} style={{ backgroundColor: "#3674B5", padding: "10px", borderRadius: "30px", marginBottom: "1rem"}}>
+                <Col style={{ backgroundColor: "white", padding: "15px 30px", borderRadius: "25px"}}>
                   <div>
-                    <h4>Posted by: {post.user.username}</h4>
+                    <h4 style={{fontFamily:"font2", color:"black"}}>{post.user.username}</h4>
                   </div>
+                  <hr></hr>
                   <div>
-                    <p>{post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content}</p>
+                    <p style={{fontFamily:"font1"}}>{post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content}</p>
                     {post.content.length > 100 && (<Link to={`/post/${post.id}`}>Read More</Link>)}
                     {Number(userId) === post.user.id && (
-                        <div>
                         <button onClick={() => handleEdit(post)}>Edit</button>
+                    )}
+                    {(Number(userId) === post.user.id || role === "ADMIN") && (
                         <button onClick={() => handleDelete(post.id, post.user.id)}>Delete</button>
-                        </div>
                     )}
                     {editingPost && editingPost.id === post.id && (
                         <PostForm post={editingPost} refreshPosts={handleUpdateComplete} cancelEdit={() => setEditingPost(null)}/>
                     )}
                   </div>
                    {/* ✅ Add Like/Unlike Button */}
-                   <div>
-                      <p>{post.likes} Likes</p>
+                    <hr></hr>
+                    {/* ✅ AddComment Component */}
+                    <span style={{display:"flex", alignItems:"center"}}>
+                    <div style={{display:"inline-block"}}>
                       <LikePost postId={post.id} likedBy={post.likedBy} refreshPost={fetchPosts} />
                     </div>
-                    <br></br>
-                    {/* ✅ AddComment Component */}
-                    <AddComment postId={post.id} onCommentAdded={fetchPosts} />
+                    <div style={{display:"inline-block"}}>
+                      <span style={{fontFamily:"font1", fontSize:"20px"}}>{post.likes} {post.likes == 1 ? "Like" : "Likes"}</span>
+                    </div>
+                    </span>
+                    <AddComment postId={post.id} onCommentAdded={handleCommentAdded} />
                     {/* ✅ Show limited comments */}
-                    <Comment postId={post.id} showAll={false} />
+                    <Comment postId={post.id} showAll={false} commentRefreshTrigger={commentRefreshTrigger} />
+                    
                 </Col>
               </Row>
             ))

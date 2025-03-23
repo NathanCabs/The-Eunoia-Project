@@ -4,6 +4,7 @@ import ProfessionalNavbar from './ProfessionalNavbar';
 import api from './Axios';
 
 function ProfessionalProfile() {
+  const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
   const [profile, setProfile] = useState({
     name: '',
     username: '',
@@ -24,7 +25,7 @@ function ProfessionalProfile() {
     try {
       const token = localStorage.getItem("authToken");
       const professionalId = localStorage.getItem("userId");
-      const response = await api.get(`http://localhost:6543/api/professionals/${professionalId}`, {
+      const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/${professionalId}`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -60,7 +61,7 @@ function ProfessionalProfile() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.put("http://localhost:6543/api/professionals/profile/update", profile, {
+      const response = await api.put("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/profile/update", profile, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -182,15 +183,31 @@ function ProfessionalProfile() {
                   readOnly={!editing}
                 />
               </Form.Group>
+              {/* Inside your form */}
               <Form.Group controlId="availability" className="mb-3">
-                <Form.Label>Availability</Form.Label>
-                <Form.Control 
-                  type="text" 
-                  name="availability" 
-                  value={profile.availability} 
-                  onChange={handleChange} 
-                  readOnly={!editing}
-                />
+                <Form.Label>Available Days</Form.Label>
+                <div>
+                  {daysOfWeek.map((day) => (
+                    <Form.Check 
+                      inline
+                      key={day}
+                      type="checkbox"
+                      label={day}
+                      name="availability"
+                      value={day}
+                      checked={profile.availability && profile.availability.includes(day)}
+                      onChange={(e) => {
+                        let newAvailability = profile.availability || [];
+                        if (e.target.checked) {
+                          newAvailability = [...newAvailability, day];
+                        } else {
+                          newAvailability = newAvailability.filter(d => d !== day);
+                        }
+                        setProfile(prev => ({ ...prev, availability: newAvailability }));
+                      }}
+                    />
+                  ))}
+                </div>
               </Form.Group>
               {editing ? (
                 <div>

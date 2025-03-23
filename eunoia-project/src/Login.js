@@ -1,6 +1,12 @@
-import './Login.css';
+import './Login.scss';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Image from 'react-bootstrap/Image';
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+// import { faUserDoctor, faUser } from '@fortawesome/react-fontawesome';
 
 function Login() {
   const navigate = useNavigate();
@@ -35,9 +41,9 @@ function Login() {
     try {
       let endpoint = "";
       if (loginRole === "USER") {
-        endpoint = "http://localhost:6543/api/login";
+        endpoint = "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/login";
       } else if (loginRole === "PROFESSIONAL") {
-        endpoint = "http://localhost:6543/api/login/professional";
+        endpoint = "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/login/professional";
       }
       
       const response = await fetch(endpoint, {
@@ -77,7 +83,7 @@ function Login() {
       } else {
         // For regular users, check if a recommended professional exists.
         try {
-          const recResponse = await fetch("http://localhost:6543/api/professionals/recommended", {
+          const recResponse = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/recommended", {
             method: "GET",
             headers: { 
               "Content-Type": "application/json",
@@ -108,41 +114,50 @@ function Login() {
     }
   };
 
+  const boyIcon = require('./assets/icons/boy.png');
+  const professionalIcon = require('./assets/icons/business-woman.png');
+  const eunoiaLogo = require('./assets/icons/eunoia_ver2.png');
+
   return (
     <center>
-      <div className="container-md" style={{ alignContent: "center", display: "grid", minHeight: "90vh" }}>
-        <div>
-          <img width={150} height={150} src="../eunoia-icon.png" alt="Your Company" />
-          <h2>Log in to your account</h2>
-        </div>
-
-        <div>
+      <div className="loginBackground">
+        <Container className="container-md registerContainer" fluid>
+          <Row>
+            <Col>
+              <Image width={175} height={175} src={eunoiaLogo} alt="Eunoia Logo" style={{margin:"30px"}} fluid/>
+              <h2 style={{fontFamily:"font2"}}>Log In</h2>
+            </Col>
+          <Row style={{margin:"0px"}}>
+            <Col>
           {/* Role selection for login */}
-          <div>
-            <label>
-              <input 
+            <Form.Label className='roleLabel'>
+              <input
+                className='roleSelect'
                 type="radio" 
                 value="USER" 
                 checked={loginRole === "USER"} 
-                onChange={handleRoleChange} 
+                onChange={handleRoleChange}
               />
               User
-            </label>
-            <label>
-              <input 
+            </Form.Label>
+            <Form.Label className='roleLabel'>
+              <input
+                className='roleSelect'
                 type="radio" 
                 value="PROFESSIONAL" 
                 checked={loginRole === "PROFESSIONAL"} 
                 onChange={handleRoleChange} 
               />
               Professional
-            </label>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label>Email address</label>
-              <div>
-                <input 
+            </Form.Label>
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center" style={{margin:"0px"}}>
+            <Col md={7} lg={3}>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group>
+              <Form.Label>Email address</Form.Label>
+                <Form.Control 
                   type="email" 
                   name="email" 
                   id="email" 
@@ -151,15 +166,11 @@ function Login() {
                   onChange={handleChange} 
                   required 
                 />
-              </div>
-            </div>
+            </Form.Group>
 
-            <div>
-              <div>
-                <label>Password</label>
-              </div>
-              <div>
-                <input 
+            <Form.Group>
+                <Form.Label>Password</Form.Label>
+                <Form.Control 
                   type="password" 
                   name="password" 
                   id="password" 
@@ -168,17 +179,18 @@ function Login() {
                   onChange={handleChange} 
                   required 
                 />
-              </div>
-              <div>
-                <a href="/register">Don't have an account? Create one</a>
-              </div>
-            </div>
-
+            </Form.Group>
+            <Col>
+              <button type="submit" className="registerButton">Log In</button>
+            </Col>
             <div>
-              <button type="submit">Log In</button>
+              <a href="/register">Don't have an account? Create one</a>
             </div>
-          </form>
-        </div>
+          </Form>
+          </Col>
+          </Row>
+        </Row>
+        </Container>
       </div>
     </center>
   );

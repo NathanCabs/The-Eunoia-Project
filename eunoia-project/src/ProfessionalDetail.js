@@ -16,7 +16,7 @@ function ProfessionalDetail() {
     const fetchProfessional = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch(`http://localhost:6543/api/professionals/${id}`, {
+        const response = await fetch(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/${id}`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
@@ -65,23 +65,26 @@ function ProfessionalDetail() {
       <NavigationBar />
       <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
         <Row>
-          <Col style={{ paddingBottom: "1.5rem" }}>
+          <Col style={{ paddingBottom: "1.5rem", fontFamily:"font1"}}>
           <Link to="/professionals">Back</Link>
-            <h1>{professional.name}</h1>
+            <h1 style={{fontFamily:"font2"}}>{professional.name}</h1>
             <h4>{professional.specialization}</h4>
             <p><strong>Focus Area:</strong> {professional.focusArea}</p>
             <p><strong>Years of Experience:</strong> {professional.yearsOfExperience}</p>
             <p><strong>Qualification:</strong> {professional.qualification}</p>
             <p><strong>Location:</strong> {professional.location}</p>
-            <p><strong>Availability:</strong> {professional.availability}</p>
+            <p><strong>Availability:</strong> {professional.availability + " "}</p>
             <Button variant="primary" onClick={() => setShowBookingModal(true)}>
               Book Now
             </Button>
+            {professional && (
             <BookingModal 
-              show={showBookingModal} 
-              handleClose={() => setShowBookingModal(false)} 
-              professionalId={professional.id} 
-            />
+            show={showBookingModal} 
+            handleClose={() => setShowBookingModal(null)} 
+            professionalId={professional.id} 
+            availableDays={professional.availability} 
+          />
+            )}
           </Col>
         </Row>
       </Container>

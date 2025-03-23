@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from './Axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 const LikePost = ({ postId, likedBy, refreshPost }) => {
   const userId = localStorage.getItem('userId');
@@ -15,10 +17,10 @@ const LikePost = ({ postId, likedBy, refreshPost }) => {
   const handleLikeToggle = async () => {
     try {
       if (liked) {
-        await api.post(`http://localhost:6543/api/posts/${postId}/unlike`);
+        await api.post(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/unlike`);
         setLiked(false);
       } else {
-        await api.post(`http://localhost:6543/api/posts/${postId}/like`);
+        await api.post(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/like`);
         setLiked(true);
       }
       if (refreshPost) {
@@ -31,8 +33,8 @@ const LikePost = ({ postId, likedBy, refreshPost }) => {
 
   return (
     <div>
-      <button onClick={handleLikeToggle}>
-        {liked ? 'Unlike' : 'Like'}
+      <button onClick={handleLikeToggle} style={{background:"transparent", border:"0px", fontSize:"35px", }}>
+        {liked ? <FontAwesomeIcon icon={faThumbsUp} /> : <FontAwesomeIcon icon={faThumbsUp}/>}
       </button>
     </div>
   );

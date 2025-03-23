@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import api from './Axios';
 import AddComment from './AddComment';
 
-const Comment = ({ postId, showAll = false }) => {
+const Comment = ({ postId, showAll = false, commentRefreshTrigger }) => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingComment, setEditingComment] = useState(null);
 
     useEffect(() => {
         fetchComments();
-    }, []);
+    }, [commentRefreshTrigger]);
 
     const fetchComments = async () => {
         try {
-            const response = await api.get(`http://localhost:6543/api/comments/post/${postId}`);
+            const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/comments/post/${postId}`);
             console.log("Comment response data:", response.data);
             setComments(response.data);
             setLoading(false);
@@ -25,7 +25,7 @@ const Comment = ({ postId, showAll = false }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            await api.delete(`http://localhost:6543/api/comments/delete/${commentId}`);
+            await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/comments/delete/${commentId}`);
             setComments(comments.filter(comment => comment.id !== commentId));
         } catch (err) {
             console.error("Failed to delete comment:", err);
@@ -42,7 +42,7 @@ const Comment = ({ postId, showAll = false }) => {
     };
 
     return (
-        <div>
+        <div style={{display:"inline-block", fontFamily:"font1"}}>
             {loading ? (
                 <p>Loading comments...</p>
             ) : (
@@ -57,21 +57,23 @@ const Comment = ({ postId, showAll = false }) => {
                             />
                         ) : (
                             <>
-                                <p>{comment.content}</p>
-                                <small>By: {comment.user.username}</small>
+                                <p style={{fontFamily:"font1"}}>{comment.content}</p>
+                                <span className="addComment">
+                                <small style={{fontFamily:"font2"}}>{comment.user.username}</small>
                                 {comment.user.id === parseInt(localStorage.getItem('userId')) && (
-                                    <div>
-                                        <button onClick={() => setEditingComment(comment)}>Edit</button>
-                                        <button onClick={() => deleteComment(comment.id)}>Delete</button>
+                                    <div style={{display:"flex"}}>
+                                        <button id="special" className="button-19" style={{marginLeft:"20px", width:"50%"}} onClick={() => setEditingComment(comment)}>Edit</button>
+                                        <button className="button-20" style={{marginLeft:"20px", width:"50%"}} onClick={() => deleteComment(comment.id)}>Delete</button>
                                     </div>
                                 )}
+                                </span>
                             </>
                         )}
                     </div>
                 ))
             )}
             {!showAll && comments.length > 3 && (
-                <button onClick={() => window.location.href = `/post/${postId}`}>View All Comments</button>
+                <button className="button-19" style={{margin:"15px", width:"100%"}} onClick={() => window.location.href = `/post/${postId}`}>View All Comments</button>
             )}
         </div>
     );

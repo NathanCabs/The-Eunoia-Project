@@ -1,4 +1,4 @@
-import './Login.css';
+import './Login.scss';
 import NavigationBar from './NavigationBar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

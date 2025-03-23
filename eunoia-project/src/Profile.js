@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavigationBar from './NavigationBar';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import api from './Axios';
+import './Login.scss';
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -72,20 +73,21 @@ function Profile() {
     return (
       <div>
         <NavigationBar />
-        <Container className="mt-4">
-          <p>Loading profile...</p>
+        <Container className="homeBackground">
+          <p style={{fontFamily:"font1"}}>Loading profile...</p>
         </Container>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="homeBackground" fluid>
       <NavigationBar />
       <Container style={{ width:"100%", paddingTop:"1.5rem" }}>
         <Row>
           <Col>
-            <h1>Profile</h1>
+          <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>Profile</h2>
+          <span style={{fontFamily:"font1"}}>
             <Form onSubmit={handleSave}>
               <Form.Group controlId="username" className="mb-3">
                 <Form.Label>Username</Form.Label>
@@ -125,6 +127,7 @@ function Profile() {
                 <Button variant="primary" onClick={() => setEditing(true)}>Edit Profile</Button>
               )}
             </Form>
+          </span>
           </Col>
         </Row>
       </Container>

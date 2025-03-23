@@ -2,7 +2,6 @@
   "name": "eunoia-project",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:6543",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
@@ -20,6 +19,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
     "react-scripts": "5.0.1",
+    "sass": "^1.86.0",
     "tailwindcss": "^4.0.3",
     "web-vitals": "^4.2.4"
   },

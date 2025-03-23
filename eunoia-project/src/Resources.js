@@ -1,4 +1,4 @@
-import './Login.css';
+import './Login.scss';
 import NavigationBar from './NavigationBar';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -6,15 +6,15 @@ import Col from 'react-bootstrap/Col';
 
 function Resources() {
     return(
-        <div fluid>
+        <div className="homeBackground" fluid>
             <NavigationBar />
             <Container style={{width:"100%", paddingTop:"1.5rem"}}>
                 <Row>
                     <Col style={{paddingBottom:"1.5rem"}}>
-                        <h1>Resources</h1>
+                    <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>Resources</h2>
                     </Col>
                 </Row>
-                <Row>
+                <Row style={{fontFamily:"font1"}}>
                     <Col style={{backgroundColor:"#3f48cc", padding:"10px", borderRadius:"30px", margin:"20px"}}>
                         <h1 style={{color:"#ffffff"}}>Resource 1</h1>
                     </Col>

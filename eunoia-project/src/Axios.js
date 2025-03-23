@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:6543/", 
+  baseURL: "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/", 
   withCredentials: true, // ✅ Allows cookies & authentication headers
   headers: {
     "Content-Type": "application/json",
@@ -17,7 +17,7 @@ api.interceptors.request.use((config) => {
     alert("Session expired. Please log in again.");
     localStorage.removeItem("authToken");
     localStorage.removeItem("userId");
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/"; // Redirect to login page
     return Promise.reject(new Error("No authentication token found."));
   }
   return config;

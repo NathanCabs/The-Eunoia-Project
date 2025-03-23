@@ -22,7 +22,7 @@ const PostDetail = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await api.get(`http://localhost:6543/api/posts/${postId}`);
+      const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}`);
       setPost(response.data);
     } catch (err) {
       setError("Post not found.");
@@ -37,7 +37,7 @@ const PostDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`http://localhost:6543/api/posts/${post.id}/delete`);
+      await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${post.id}/delete`);
       alert("Post deleted successfully!");
       navigate("/home");
     } catch (err) {
@@ -71,12 +71,12 @@ const PostDetail = () => {
       <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
         <Row>
           <Col style={{ paddingBottom: "1.5rem" }}>
-            <Link to="/home" onClick={() => setEditing(false)}>Back</Link>
-            <h2>{post.user.username}'s Post</h2>
+            <Link to="/home" onClick={() => setEditing(false)} style={{fontFamily:"font1"}}>Back</Link>
+            <h2 style={{fontFamily:"font2"}}>{post.user.username}'s Post</h2>
             {editing ? (
               <CreatePost post={post} refreshPosts={refreshPost} cancelEdit={cancelEdit} />
             ) : (
-              <p>{post.content}</p>
+              <p style={{fontFamily:"font1"}}>{post.content}</p>
             )}
             {/* Show edit and delete options if the logged-in user is the original author and not in edit mode */}
             {parseInt(userId) === post.user.id && !editing && (
@@ -85,14 +85,16 @@ const PostDetail = () => {
                 <button onClick={handleDelete}>Delete</button>
               </div>
             )}
-            <div>
-              <p>{post.likes} Likes</p>
-              <LikePost postId={post.id} likedBy={post.likedBy} refreshPost={fetchPost} />
-            </div>
-            {/* AddComment triggers a refresh of comments when a new comment is added */}
-            <AddComment postId={post.id} onCommentAdded={handleCommentAdded} />
-            {/* The key change forces Comment to remount and fetch new data */}
-            <Comment key={commentRefresh} postId={post.id} showAll={true} />
+            <span style={{display:"flex", alignItems:"center"}}>
+              <div style={{display:"inline-block"}}>
+                <LikePost postId={post.id} likedBy={post.likedBy} refreshPost={fetchPost} />
+              </div>
+              <div style={{display:"inline-block"}}>
+            <span style={{fontFamily:"font1", fontSize:"20px"}}>{post.likes} {post.likes == 1 ? "Like" : "Likes"}</span>
+              </div>
+            </span>
+              <AddComment postId={post.id} onCommentAdded={handleCommentAdded} />
+              <Comment key={commentRefresh} postId={post.id} showAll={true} />
           </Col>
         </Row>
       </Container>

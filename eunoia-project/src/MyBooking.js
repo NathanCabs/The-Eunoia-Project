@@ -3,6 +3,7 @@ import NavigationBar from './NavigationBar';
 import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import api from './Axios';
 import { useNavigate } from 'react-router-dom';
+import './Login.scss';
 
 function MyBooking() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function MyBooking() {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.get("http://localhost:6543/api/bookings/user", {
+      const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/user", {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -48,7 +49,7 @@ function MyBooking() {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }
@@ -73,21 +74,21 @@ function MyBooking() {
   };
 
   return (
-    <div>
+    <div className="homeBackground" fluid>
       <NavigationBar />
       <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
         <Row>
           <Col style={{ paddingBottom: "1.5rem" }}>
-            <h1>My Booking</h1>
+            <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>My Booking</h2>
           </Col>
         </Row>
         <Row>
           {loading ? (
-            <p>Loading bookings...</p>
+            <p style={{fontFamily:"font1"}}>Loading bookings...</p>
           ) : error ? (
             <p>{error}</p>
           ) : bookings.length === 0 ? (
-            <p>You have no bookings.</p>
+            <p style={{fontFamily:"font1"}}>You have no bookings.</p>
           ) : (
             bookings.map((booking) => (
               <Col key={booking.id} xs={12} md={6} lg={4} className="mb-4">

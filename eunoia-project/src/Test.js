@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import './Login.css';
+import './Login.scss';
 import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
 
 function Test() {
     const navigate = useNavigate();
@@ -93,7 +97,7 @@ function Test() {
     };
     
     try {
-      const response = await fetch("http://localhost:6543/api/pre-assessment/submit", {
+      const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/pre-assessment/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,45 +130,52 @@ function Test() {
   // Render based on current step
   if (step === 1) {
     return (
-      <div className="test-container">
-        <h1>Assessment Test</h1>
-        <form onSubmit={handleDemographicsSubmit}>
-          <div>
-            <label>Age: </label>
-            <input 
-              type="number" 
-              value={age} 
-              onChange={(e) => setAge(e.target.value)} 
-              required 
+      <div style={{alignItems:"center"}}>
+      <center className="homeBackground">
+      <div className="container-md homeBackground" style={{alignContent:"center", display:"grid", textAlign:"center", fontFamily:"font1", userSelect:"none", justifyContent:"center", position:"relative", marginTop:"30vh"}} fluid>
+        <div style={{alignItems:"center", justifyContent:"center"}}>
+        <h1 style={{fontFamily:"font2"}}>Pre-Assessment Form</h1>
+        <Form onSubmit={handleDemographicsSubmit}>
+          <Form.Group>
+            <Form.Label>Age: </Form.Label>
+            <Form.Control
+              type="number"
+              value={age}
+              onChange={(e) => setAge(e.target.value)}
+              required
             />
-          </div>
-          <div>
-            <label>Gender: </label>
-            <select value={gender} onChange={(e) => setGender(e.target.value)} required>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Gender: </Form.Label>
+            <Form.Select value={gender} onChange={(e) => setGender(e.target.value)} required>
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <button type="submit">Start Test</button>
-        </form>
+            </Form.Select>
+          </Form.Group>
+          <button className="registerButton" type="submit" style={{minWidth:"30%", width:"30%"}}>Start Test</button>
+        </Form>
+        </div>
+      </div>
+      </center>
       </div>
     );
   } else if (step === 2) {
     return (
-      <div className="test-container">
-        <h1>Assessment Test</h1>
-        <div className="game-details-container">
-          <h2>Question: {currentQuestion + 1} / {questions.length}</h2>
+      <center className="homeBackground">
+      <div className="container-md homeBackground" style={{fontFamily:"font1", alignItems:"center", justifyContent:"center", position:"relative", marginTop:"30vh"}}>
+        <h1 style={{fontFamily:"font2"}}>Pre-Assessment Form</h1>
+        <div>
+          <h3 style={{color:"#1f2949"}}>Question: {currentQuestion + 1} / {questions.length}</h3>
         </div>
-        <div className="game-question-container">
-          <h3>{questions[currentQuestion]}</h3>
+        <div>
+          <h2 style={{color:"#3674B5"}}>{questions[currentQuestion]}</h2>
         </div>
-        <div className="game-options-container">
+        <div className="assessmentContainer">
           {options.map((option) => (
-            <div key={option.value}>
+            <div key={option.value} className="assessmentButtonContainer">
               <input 
+                className="hidden"
                 type="radio" 
                 id={`option-${option.value}`} 
                 name="option" 
@@ -172,34 +183,39 @@ function Test() {
                 checked={responses[currentQuestion] === option.value}
                 onChange={() => handleOptionSelect(option.value)}
               />
-              <label htmlFor={`option-${option.value}`}>{option.label}</label>
+              <label className="assessmentButtonLabel" htmlFor={`option-${option.value}`}>{option.label}</label>
             </div>
           ))}
         </div>
-        <div className="next-button-container">
+        <div style={{display:"flex", justifyContent:"center"}}>
           {currentQuestion > 0 && (
-            <button onClick={handlePrevQuestion}>Previous</button>
+            <button onClick={handlePrevQuestion} className="registerButton" style={{width:"40%", margin:"20px"}}>⇦ Previous</button>
           )}
-          <button onClick={handleNextQuestion} disabled={loading}>
-            {currentQuestion === questions.length - 1 ? "Submit Test" : "Next Question"}
+          <button onClick={handleNextQuestion} disabled={loading} className="registerButton" style={currentQuestion > 0 ? { width: "40%", margin:"20px" } : { width : "40%", margin:"20px"}}>
+            {currentQuestion === questions.length - 1 ? "Submit Test ✔" : "Next Question ⇨"}
           </button>
         </div>
       </div>
+      </center>
     );
   } else if (step === 3) {
     return (
-      <div className="test-container">
-        <h1>Test Completed</h1>
+      <center className="homeBackground">
+      <div className="container-md homeBackground" style={{fontFamily:"font1", alignItems:"center", justifyContent:"center", position:"relative", marginTop:"30vh"}}>
+        <h1 style={{fontFamily:"font2"}}>Test Completed</h1>
         {loading ? (
           <p>Processing...</p>
         ) : (
           <div>
             <h2>{result}</h2>
-            <button onClick={() => window.location.reload()}>Retake Test</button>
-            <button onClick={() => navigate("/home")}>Done</button>
+            <div style={{display:"flex", justifyContent:"center"}}>
+            <button onClick={() => window.location.reload()} className="registerButton" style={{width:"30%", margin:"20px"}}>↻ Retake Test</button>
+            <button onClick={() => navigate("/home")} className="registerButton" style={{width:"30%", margin:"20px"}}>Done ✔</button>
+            </div>
           </div>
         )}
       </div>
+      </center>
     );
   }
   

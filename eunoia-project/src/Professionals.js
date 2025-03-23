@@ -4,6 +4,7 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import BookingModal from "./BookingModal";
+import './Login.scss';
 
 const Professionals = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Professionals = () => {
     const fetchProfessionals = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch("http://localhost:6543/api/professionals/recommended", {
+        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/recommended", {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
@@ -48,7 +49,7 @@ const Professionals = () => {
     return (
       <div>
         <NavigationBar />
-        <Container className="mt-4">
+        <Container className="homeBackground" style={{fontFamily:"font1"}}>
           <p>Loading professionals...</p>
         </Container>
       </div>
@@ -59,7 +60,7 @@ const Professionals = () => {
     return (
       <div>
         <NavigationBar />
-        <Container className="mt-4">
+        <Container className="homeBackground">
           <p>{error}</p>
         </Container>
       </div>
@@ -67,10 +68,10 @@ const Professionals = () => {
   }
 
   return (
-    <div>
+    <div className="homeBackground" fluid>
       <NavigationBar />
       <Container className="mt-4">
-        <h2 className="text-center mb-4">Professionals</h2>
+        <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>Professionals</h2>
         <Row className="g-4">
           {professionals.map((pro) => (
             <Col key={pro.id} xs={12} md={6} lg={4}>
@@ -80,18 +81,10 @@ const Professionals = () => {
                 style={{ cursor: "pointer" }}
               >
                 <Row className="g-0 align-items-center">
-                  <Col xs={4} className="text-center">
-                    <Card.Img
-                      src={pro.image || "https://via.placeholder.com/150"}
-                      alt={pro.name}
-                      className="rounded-circle p-2"
-                      style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                    />
-                  </Col>
-                  <Col xs={8}>
-                    <Card.Body>
-                      <Card.Title>{pro.name}</Card.Title>
-                      <Card.Subtitle className="text-muted">{pro.specialization}</Card.Subtitle>
+                  <Col xs={12} style={{border:"solid 3px #3674B5", borderRadius:"6px"}}>
+                    <Card.Body >
+                      <Card.Title style={{fontFamily:"font1"}}>{pro.name}</Card.Title>
+                      <Card.Subtitle className="text-muted" style={{fontFamily:"font1"}}>{pro.specialization}</Card.Subtitle>
                       <Button
                         variant="primary"
                         className="mt-2"
@@ -110,10 +103,11 @@ const Professionals = () => {
           ))}
         </Row>
         {bookingProfessional && (
-          <BookingModal
-            show={true}
-            handleClose={() => setBookingProfessional(null)}
-            professionalId={bookingProfessional.id}
+          <BookingModal 
+            show={true} 
+            handleClose={() => setBookingProfessional(null)} 
+            professionalId={bookingProfessional.id} 
+            availableDays={bookingProfessional.availability} 
           />
         )}
       </Container>
