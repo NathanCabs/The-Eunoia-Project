@@ -56,7 +56,6 @@ function Register() {
     
     if (role === "USER") {
       try {
-        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userData),
@@ -72,7 +71,6 @@ function Register() {
       }
     } else if (role === "PROFESSIONAL") {
       try {
-        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/register/professional", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(professionalData),
@@ -254,6 +252,9 @@ function Register() {
               </Form>
               <div>
                 <a href="/">Already have an account? Log in</a>
+                <button onClick={() => navigate('/')} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer'}}>
+                  Already have an account? Log In
+                </button>
               </div>
             </Col>
           </Row>
