@@ -41,7 +41,9 @@ function Login() {
     try {
       let endpoint = "";
       if (loginRole === "USER") {
+        endpoint = "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/login";
       } else if (loginRole === "PROFESSIONAL") {
+        endpoint = "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/login/professional";
       }
       
       const response = await fetch(endpoint, {
@@ -81,6 +83,7 @@ function Login() {
       } else {
         // For regular users, check if a recommended professional exists.
         try {
+          const recResponse = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/recommended", {
             method: "GET",
             headers: { 
               "Content-Type": "application/json",
@@ -181,7 +184,6 @@ function Login() {
               <button type="submit" className="registerButton">Log In</button>
             </Col>
             <div>
-              <a href="/register">Don't have an account? Create one</a>
               <button onClick={() => navigate('/register')} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer'}}>
                 Don't have an account? Create one
               </button>
