@@ -55,7 +55,8 @@ public String submitPreAssessment(PreAssessmentRequest request, String email) {
 
     try {
         // 🔎 Step 2: Send data to Flask API
-        String flaskUrl = " https://eunoia.social/predict";
+//        String flaskUrl = "https://eunoia.social/predict";
+        String flaskUrl = "https://eunoia.social/flasktest/predict";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
