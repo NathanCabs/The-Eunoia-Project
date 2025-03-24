@@ -74,16 +74,20 @@ const PostDetail = () => {
             <Link to="/home" onClick={() => setEditing(false)} style={{fontFamily:"font1"}}>Back</Link>
             <h2 style={{fontFamily:"font2"}}>{post.user.username}'s Post</h2>
             {editing ? (
-              <CreatePost post={post} refreshPosts={refreshPost} cancelEdit={cancelEdit} />
+            <div style={{display:"block"}}>
+              <CreatePost post={post} refreshPosts={refreshPost} cancelEdit={cancelEdit}/>
+            </div>
             ) : (
               <p style={{fontFamily:"font1"}}>{post.content}</p>
             )}
             {/* Show edit and delete options if the logged-in user is the original author and not in edit mode */}
             {parseInt(userId) === post.user.id && !editing && (
+              <span className="addComment">
               <div>
-                <button onClick={() => setEditing(true)}>Edit</button>
-                <button onClick={handleDelete}>Delete</button>
+                <button className="button-19" onClick={() => setEditing(true)} style={{margin:"5px", width:"auto"}}>Edit</button>
+                <button className="button-21" onClick={handleDelete} style={{margin:"5px", width:"auto"}}>Delete</button>
               </div>
+              </span>
             )}
             <span style={{display:"flex", alignItems:"center"}}>
               <div style={{display:"inline-block"}}>

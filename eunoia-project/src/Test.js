@@ -209,7 +209,7 @@ function Test() {
           <div>
             <h2>{result}</h2>
             <div style={{display:"flex", justifyContent:"center"}}>
-            <button onClick={() => window.location.reload()} className="registerButton" style={{width:"30%", margin:"20px"}}>↻ Retake Test</button>
+            {/* <button onClick={() => window.location.reload()} className="registerButton" style={{width:"30%", margin:"20px"}}>↻ Retake Test</button> */}
             <button onClick={() => navigate("/home")} className="registerButton" style={{width:"30%", margin:"20px"}}>Done ✔</button>
             </div>
           </div>

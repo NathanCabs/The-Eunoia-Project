@@ -24,11 +24,13 @@ function Resources() {
                         <Col key={index} md={6} lg={4} className="mb-4">
                             <Card className="h-100 shadow-sm">
                                 <Card.Body>
-                                    <Card.Title>{resource.title}</Card.Title>
+                                    <Card.Title style={{fontFamily:"font2"}}>{resource.title}</Card.Title>
                                     <Button 
                                         variant="primary" 
                                         href={resource.mainLink} 
                                         target="_blank"
+                                        style={{fontFamily:"font1", width:"auto", marginLeft:"8px", marginTop:"5px"}}
+                                        className="button-19"
                                     >
                                         View Resource
                                     </Button>
@@ -37,7 +39,8 @@ function Resources() {
                                             variant="outline-secondary" 
                                             href={resource.subLink} 
                                             target="_blank" 
-                                            className="ms-2"
+                                            className="ms-2 button-20"
+                                            style={{fontFamily:"font1", width:"auto", marginTop:"5px"}}
                                         >
                                             More Info
                                         </Button>

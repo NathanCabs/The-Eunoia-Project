@@ -5,6 +5,7 @@ import './Login.scss';
 // import Col from 'react-bootstrap/Col';
 import React, { useState } from 'react';
 import api from './Axios';
+import { faDisplay } from '@fortawesome/free-solid-svg-icons';
 
 const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
     const [content, setContent] = useState(post ? post.content : "");
@@ -51,7 +52,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
 
     return(
         <div fluid>
-            <form action="#" method="POST" onSubmit={handleSubmit}>
+            <form action="#" method="POST" onSubmit={handleSubmit} style={{display:"block"}}>
                 <div>
                     <div>
                         <textarea
@@ -60,7 +61,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                             onChange={(e) => setContent(e.target.value)}
                             placeholder={post ? "Edit Post" : "What's on your mind?"}
                             required
-                            style={{ minHeight: "60px", resize: "none", overflowY: "hidden", fontFamily:"font1"}}
+                            style={post ? { minHeight: "60px", resize: "none", overflowY: "hidden", fontFamily:"font1", width:"auto"} : { minHeight: "60px", resize: "none", overflowY: "hidden", fontFamily:"font1"} }
                             rows={1}
                             onInput={(e) => {
                                 e.target.style.height = "auto"; // Reset height
@@ -71,8 +72,8 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                 </div>
                 <div>
-                    {post && <button type="button" onClick={cancelEdit} className="registerButton">Cancel</button>}
-                    <button type="submit" className="registerButton" style={{width:"20%"}}>{post ? "Done" : "Post"}</button>
+                    {post && <button type="button" onClick={cancelEdit} className="button-20" style={{width:"auto", margin:"5px"}}>Cancel</button>}
+                    <button type="submit" className="button-19" style={{width:"auto", margin:"5px"}}>{post ? "Done" : "Post"}</button>
                 </div>
             </form>
         </div>

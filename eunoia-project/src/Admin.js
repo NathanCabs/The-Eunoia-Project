@@ -372,34 +372,34 @@ function Admin() {
     return (
     <>
       <h4>Manage Mental Health Resources</h4>
-                                <Button onClick={() => { setEditMode(false); setShowModal(true); }} variant="primary" className="mb-3">
-                                    Add New Resource
-                                </Button>
-                                <Table bordered hover>
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Title</th>
-                                            <th>Main Link</th>
-                                            <th>Sub Link</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {resourceList.map((resource, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{resource.title}</td>
-                                                <td><a href={resource.mainLink} target="_blank" rel="noopener noreferrer">Visit</a></td>
-                                                <td>{resource.subLink ? <a href={resource.subLink} target="_blank" rel="noopener noreferrer">More Info</a> : "N/A"}</td>
-                                                <td>
-                                                    <Button variant="warning" size="sm" className="me-2" onClick={() => handleEditResource(index)}>Edit</Button>
-                                                    <Button variant="danger" size="sm" onClick={() => deleteResource(index)}>Delete</Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
+        <Button onClick={() => { setEditMode(false); setShowModal(true); }} variant="primary" className="mb-3">
+          Add New Resource
+        </Button>
+        <Table bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Main Link</th>
+              <th>Sub Link</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {resourceList.map((resource, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{resource.title}</td>
+              <td><a href={resource.mainLink} target="_blank" rel="noopener noreferrer">Visit</a></td>
+              <td>{resource.subLink ? <a href={resource.subLink} target="_blank" rel="noopener noreferrer">More Info</a> : "N/A"}</td>
+              <td>
+                <Button variant="warning" size="sm" className="me-2" onClick={() => handleEditResource(index)}>Edit</Button>
+                <Button variant="danger" size="sm" onClick={() => deleteResource(index)}>Delete</Button>
+              </td>
+            </tr>
+            ))}
+          </tbody>
+        </Table>
       </>
     );
   }

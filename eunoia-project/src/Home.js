@@ -81,16 +81,18 @@ function Home() {
                   <hr></hr>
                   <div>
                     <p style={{fontFamily:"font1"}}>{post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content}</p>
-                    {post.content.length > 100 && (<Link to={`/post/${post.id}`}>Read More</Link>)}
+                    {post.content.length > 100 && (<Link to={`/post/${post.id}`} style={{fontFamily:"font1", background: 'none', border: 'none', color: 'blue', cursor: 'pointer'}}>Read More</Link>)}
+                    <span className="addComment">
                     {Number(userId) === post.user.id && (
-                        <button onClick={() => handleEdit(post)}>Edit</button>
+                        <button className="button-19" onClick={() => handleEdit(post)} style={{margin:"5px", width:"auto"}}>Edit</button>
                     )}
                     {(Number(userId) === post.user.id || role === "ADMIN") && (
-                        <button onClick={() => handleDelete(post.id, post.user.id)}>Delete</button>
+                        <button className="button-21" onClick={() => handleDelete(post.id, post.user.id)} style={{margin:"5px", width:"auto"}}>Delete</button>
                     )}
                     {editingPost && editingPost.id === post.id && (
                         <PostForm post={editingPost} refreshPosts={handleUpdateComplete} cancelEdit={() => setEditingPost(null)}/>
                     )}
+                    </span>
                   </div>
                    {/* ✅ Add Like/Unlike Button */}
                     <hr></hr>
