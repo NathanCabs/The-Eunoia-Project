@@ -41,9 +41,9 @@ function Login() {
     try {
       let endpoint = "";
       if (loginRole === "USER") {
-        endpoint = "http://localhost:6543/api/login";
+        endpoint = "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/login";
       } else if (loginRole === "PROFESSIONAL") {
-        endpoint = "http://localhost:6543/api/login/professional";
+        endpoint = "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/login/professional";
       }
       
       const response = await fetch(endpoint, {
@@ -83,7 +83,7 @@ function Login() {
       } else {
         // For regular users, check if a recommended professional exists.
         try {
-          const recResponse = await fetch("http://localhost:6543/api/professionals/recommended", {
+          const recResponse = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/recommended", {
             method: "GET",
             headers: { 
               "Content-Type": "application/json",

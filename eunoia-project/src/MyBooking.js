@@ -18,7 +18,7 @@ function MyBooking() {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.get("http://localhost:6543/api/bookings/user", {
+      const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/user", {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -49,7 +49,7 @@ function MyBooking() {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }

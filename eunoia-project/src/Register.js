@@ -56,7 +56,7 @@ function Register() {
     
     if (role === "USER") {
       try {
-        const response = await fetch("http://localhost:6543/api/register", {
+        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(userData),
@@ -72,7 +72,7 @@ function Register() {
       }
     } else if (role === "PROFESSIONAL") {
       try {
-        const response = await fetch("http://localhost:6543/api/register/professional", {
+        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/register/professional", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(professionalData),

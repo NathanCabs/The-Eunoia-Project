@@ -16,7 +16,7 @@ function ProfessionalDetail() {
     const fetchProfessional = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch(`http://localhost:6543/api/professionals/${id}`, {
+        const response = await fetch(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/${id}`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token

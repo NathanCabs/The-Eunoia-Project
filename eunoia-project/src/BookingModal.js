@@ -67,7 +67,7 @@ const BookingModal = ({ show, handleClose, professionalId, refreshBookings, avai
       // Combine date and time into ISO format (assumes local time)
       const bookingDateTime = `${bookingDate}T${bookingTime}`;
       const payload = { professionalId, bookingDateTime };
-      const response = await api.post("http://localhost:6543/api/bookings", payload, {
+      const response = await api.post("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings", payload, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token

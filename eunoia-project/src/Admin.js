@@ -208,7 +208,7 @@ function Admin() {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }
