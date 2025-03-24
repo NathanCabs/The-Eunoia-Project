@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "https://eunoia.social")
+@RequestMapping("/api/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
