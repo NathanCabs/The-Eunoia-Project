@@ -22,7 +22,7 @@ const PostDetail = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}`);
+      const response = await api.get(`http://localhost:6543/api/posts/${postId}`);
       setPost(response.data);
     } catch (err) {
       setError("Post not found.");
@@ -37,7 +37,7 @@ const PostDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${post.id}/delete`);
+      await api.delete(`http://localhost:6543/api/posts/${post.id}/delete`);
       alert("Post deleted successfully!");
       navigate("/home");
     } catch (err) {

@@ -18,7 +18,7 @@ const Professionals = () => {
     const fetchProfessionals = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/recommended", {
+        const response = await fetch("http://localhost:6543/api/professionals/recommended", {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
@@ -71,7 +71,7 @@ const Professionals = () => {
     <div className="homeBackground" fluid>
       <NavigationBar />
       <Container className="mt-4">
-        <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>Professionals</h2>
+        <h2 className="text-center mb-4" style={{fontFamily:"font2", userSelect:"none"}}>Professionals</h2>
         <Row className="g-4">
           {professionals.map((pro) => (
             <Col key={pro.id} xs={12} md={6} lg={4}>
@@ -87,7 +87,7 @@ const Professionals = () => {
                       <Card.Subtitle className="text-muted" style={{fontFamily:"font1"}}>{pro.specialization}</Card.Subtitle>
                       <Button
                         variant="primary"
-                        className="mt-2"
+                        className="mt-2 button-19"
                         onClick={(e) => {
                           e.stopPropagation();
                           setBookingProfessional(pro);

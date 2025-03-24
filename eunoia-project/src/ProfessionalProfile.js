@@ -25,7 +25,7 @@ function ProfessionalProfile() {
     try {
       const token = localStorage.getItem("authToken");
       const professionalId = localStorage.getItem("userId");
-      const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/${professionalId}`, {
+      const response = await api.get(`http://localhost:6543/api/professionals/${professionalId}`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -61,7 +61,7 @@ function ProfessionalProfile() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.put("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/profile/update", profile, {
+      const response = await api.put("http://localhost:6543/api/professionals/profile/update", profile, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token

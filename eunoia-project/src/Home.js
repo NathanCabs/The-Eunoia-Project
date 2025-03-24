@@ -29,7 +29,7 @@ function Home() {
   
     const fetchPosts = async () => {
       try {
-        const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts",);
+        const response = await api.get("http://localhost:6543/api/posts",);
         console.log("Post response data:", response.data);
         const sortedPosts = response.data.sort((a, b) => b.likes - a.likes);
         setPosts(sortedPosts);
@@ -40,7 +40,7 @@ function Home() {
 
     const handleDelete = async (postId) => {
         try {
-          await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/delete`,);
+          await api.delete(`http://localhost:6543/api/posts/${postId}/delete`,);
           alert("Post deleted successfully!");
           fetchPosts();
         } catch (error) {
@@ -73,7 +73,7 @@ function Home() {
           </Row>
           {posts.length > 0 ? (
             posts.map((post) => (
-              <Row key={post.id} style={{ backgroundColor: "#3674B5", padding: "10px", borderRadius: "30px", marginBottom: "1rem"}}>
+              <Row key={post.id} className="cardShadow" style={{ backgroundColor: "#3674B5", padding: "10px", borderRadius: "30px", marginBottom: "1rem"}}>
                 <Col style={{ backgroundColor: "white", padding: "15px 30px", borderRadius: "25px"}}>
                   <div>
                     <h4 style={{fontFamily:"font2", color:"black"}}>{post.user.username}</h4>

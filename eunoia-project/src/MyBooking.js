@@ -18,7 +18,7 @@ function MyBooking() {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/user", {
+      const response = await api.get("http://localhost:6543/api/bookings/user", {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -49,7 +49,7 @@ function MyBooking() {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }
@@ -76,7 +76,7 @@ function MyBooking() {
   return (
     <div className="homeBackground" fluid>
       <NavigationBar />
-      <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
+      <Container style={{ width: "100%", paddingTop: "1.5rem", userSelect:"none" }}>
         <Row>
           <Col style={{ paddingBottom: "1.5rem" }}>
             <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>My Booking</h2>
@@ -92,9 +92,9 @@ function MyBooking() {
           ) : (
             bookings.map((booking) => (
               <Col key={booking.id} xs={12} md={6} lg={4} className="mb-4">
-                <Card>
+                <Card style={{fontFamily:"font1", border:"solid 3px #3674B5", borderRadius:"6px"}}>
                   <Card.Body>
-                    <Card.Title>
+                    <Card.Title style={{fontFamily:"font2"}}>
                       {booking.professional.name}
                     </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
@@ -105,12 +105,10 @@ function MyBooking() {
                       <br />
                       <strong>Status:</strong> {booking.status}
                     </Card.Text>
-                  </Card.Body>
-                  <Card.Footer className="d-flex justify-content-end">
-                    <Button variant="danger" onClick={() => handleCancelClick(booking)}>
+                    <Button className="button-21" variant="danger" onClick={() => handleCancelClick(booking)} style={{width:"100%"}}>
                       Cancel
                     </Button>
-                  </Card.Footer>
+                  </Card.Body>
                 </Card>
               </Col>
             ))
@@ -119,18 +117,18 @@ function MyBooking() {
       </Container>
 
       {/* Confirm Cancellation Modal */}
-      <Modal show={showConfirmModal} onHide={handleCloseModal} centered>
+      <Modal show={showConfirmModal} onHide={handleCloseModal} centered style={{fontFamily:"font1"}}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Cancellation</Modal.Title>
+          <Modal.Title style={{fontFamily:"font2"}}>Confirm Cancellation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           Are you sure you want to cancel this booking?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button className="button-19" variant="primary" onClick={handleCloseModal} style={{margin:"5px"}}>
             No, keep it
           </Button>
-          <Button variant="danger" onClick={handleConfirmCancel}>
+          <Button className="button-21" variant="danger" onClick={handleConfirmCancel} style={{margin:"5px"}}>
             Yes, cancel it
           </Button>
         </Modal.Footer>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/", 
+  baseURL: "http://localhost:6543/", 
   withCredentials: true, // ✅ Allows cookies & authentication headers
   headers: {
     "Content-Type": "application/json",

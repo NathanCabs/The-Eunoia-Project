@@ -21,9 +21,11 @@ import AddComment from './AddComment';
 import ProfessionalBooking from './ProfessionalBooking';
 import ProfessionalProfile from './ProfessionalProfile';
 import MyBooking from './MyBooking';
+import { ResourceProvider } from './ResourceContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <ResourceProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
@@ -45,6 +47,7 @@ root.render(
         <Route path="/my-booking/:id" element={<MyBooking />} />
       </Routes>
     </BrowserRouter>
+  </ResourceProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -14,7 +14,7 @@ const AddComment = ({ postId, comment = null, onCommentAdded, onCancel }) => {
         try {
             if (comment) {
                 // Update existing comment
-                const response = await api.put(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/comments/update/${comment.id}`, 
+                const response = await api.put(`http://localhost:6543/api/comments/update/${comment.id}`, 
                     { userId, content });
                     if (response.status === 200) {
                         setContent(""); // Clear input
@@ -22,7 +22,7 @@ const AddComment = ({ postId, comment = null, onCommentAdded, onCancel }) => {
                     }
             } else {
                 // Create new comment
-                const response = await api.post(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/comments/add`, 
+                const response = await api.post(`http://localhost:6543/api/comments/add`, 
                     { postId, userId, content });
                     if (response.status === 200) {
                         setContent(""); // Clear input

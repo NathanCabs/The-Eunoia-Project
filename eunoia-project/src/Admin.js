@@ -1,10 +1,13 @@
 import './Login.scss';
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Nav, Table, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Nav, Table, Button, Modal, Form } from 'react-bootstrap';
 import api from './Axios';
 import NavigationBar from './NavigationBar';
+import { ResourceContext } from './ResourceContext';
+import { useContext } from 'react';
 
 function Admin() {
+  const { resourceList, addResource, editResource, deleteResource } = useContext(ResourceContext);
   const [activeTab, setActiveTab] = useState("users");
 
   // States for each data set
@@ -17,6 +20,40 @@ function Admin() {
   // States for loading & errors
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [editMode, setEditMode] = useState(false);
+  const [currentResourceIndex, setCurrentResourceIndex] = useState(null);
+  const [newResource, setNewResource] = useState({ title: "", mainLink: "", subLink: "" });
+  const [showModal, setShowModal] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewResource((prev) => ({ ...prev, [name]: value }));
+};
+
+  const handleSaveResource = () => {
+      if (!newResource.title || !newResource.mainLink) {
+          alert("Please fill in all required fields.");
+          return;
+      }
+
+      if (editMode) {
+          editResource(currentResourceIndex, newResource); // Update resource
+      } else {
+          addResource(newResource); // Add new resource
+      }
+
+      setShowModal(false);
+      setEditMode(false);
+      setNewResource({ title: "", mainLink: "", subLink: "" });
+  };
+
+  const handleEditResource = (index) => {
+      setCurrentResourceIndex(index);
+      setNewResource(resourceList[index]);
+      setEditMode(true);
+      setShowModal(true);
+  };
 
   // Fetch Users
   const fetchUsers = async () => {
@@ -171,7 +208,7 @@ function Admin() {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }
@@ -331,13 +368,49 @@ function Admin() {
     </>
   );
 
+  const renderResourcesTable =() => {
+    return (
+    <>
+      <h4>Manage Mental Health Resources</h4>
+                                <Button onClick={() => { setEditMode(false); setShowModal(true); }} variant="primary" className="mb-3">
+                                    Add New Resource
+                                </Button>
+                                <Table bordered hover>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Main Link</th>
+                                            <th>Sub Link</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {resourceList.map((resource, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{resource.title}</td>
+                                                <td><a href={resource.mainLink} target="_blank" rel="noopener noreferrer">Visit</a></td>
+                                                <td>{resource.subLink ? <a href={resource.subLink} target="_blank" rel="noopener noreferrer">More Info</a> : "N/A"}</td>
+                                                <td>
+                                                    <Button variant="warning" size="sm" className="me-2" onClick={() => handleEditResource(index)}>Edit</Button>
+                                                    <Button variant="danger" size="sm" onClick={() => deleteResource(index)}>Delete</Button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </Table>
+      </>
+    );
+  }
+
   return (
     <div>
     <NavigationBar />
     <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
       <Row>
-        <Col style={{ paddingBottom: "1.5rem" }}>
-          <h1>Admin Dashboard</h1>
+        <Col style={{paddingBottom:"1.5rem"}}>
+          <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>Admin Dashboard</h2>
         </Col>
       </Row>
       {/* Nav Tabs */}
@@ -351,6 +424,9 @@ function Admin() {
         <Nav.Item>
           <Nav.Link eventKey="bookings">Bookings</Nav.Link>
         </Nav.Item>
+        <Nav.Item>
+            <Nav.Link eventKey="resources">Manage Resources</Nav.Link>
+        </Nav.Item>
       </Nav>
       <Row className="mt-4">
         <Col>
@@ -361,6 +437,7 @@ function Admin() {
               {activeTab === "users" && renderUsersTable()}
               {activeTab === "professionals" && renderProfessionalsTable()}
               {activeTab === "bookings" && renderBookingsTable()}
+              {activeTab === "resources" && renderResourcesTable()}
             </>
           )}
         </Col>
@@ -384,7 +461,37 @@ function Admin() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+    {/* Add/Edit Modal */}
+    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>{editMode ? "Edit Resource" : "Add New Resource"}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control type="text" name="title" value={newResource.title} onChange={handleInputChange} required />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Main Link</Form.Label>
+                            <Form.Control type="url" name="mainLink" value={newResource.mainLink} onChange={handleInputChange} required />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Sub Link (Optional)</Form.Label>
+                            <Form.Control type="url" name="subLink" value={newResource.subLink} onChange={handleInputChange} />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
+                    <Button variant="primary" onClick={handleSaveResource}>
+                        {editMode ? "Save Changes" : "Add Resource"}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
     </div>
+
   );
 }
 

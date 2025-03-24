@@ -67,7 +67,7 @@ const BookingModal = ({ show, handleClose, professionalId, refreshBookings, avai
       // Combine date and time into ISO format (assumes local time)
       const bookingDateTime = `${bookingDate}T${bookingTime}`;
       const payload = { professionalId, bookingDateTime };
-      const response = await api.post("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings", payload, {
+      const response = await api.post("http://localhost:6543/api/bookings", payload, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -89,9 +89,9 @@ const BookingModal = ({ show, handleClose, professionalId, refreshBookings, avai
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={handleClose} centered style={{fontFamily:"font1"}}>
       <Modal.Header closeButton>
-        <Modal.Title>Book Professional</Modal.Title>
+        <Modal.Title style={{fontFamily:"font2"}}>Book Professional</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -121,8 +121,8 @@ const BookingModal = ({ show, handleClose, professionalId, refreshBookings, avai
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-        <Button variant="primary" onClick={handleBookingSubmit} disabled={loading}>
+        <Button className="button-20" variant="secondary" onClick={handleClose} style={{margin:"5px"}}>Cancel</Button>
+        <Button className="button-19" variant="primary" onClick={handleBookingSubmit} disabled={loading} style={{margin:"5px"}}>
           {loading ? "Booking..." : "Confirm Booking"}
         </Button>
       </Modal.Footer>

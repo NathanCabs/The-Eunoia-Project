@@ -83,48 +83,56 @@ function Profile() {
   return (
     <div className="homeBackground" fluid>
       <NavigationBar />
-      <Container style={{ width:"100%", paddingTop:"1.5rem" }}>
+      <Container style={{ width:"100%", paddingTop:"1.5rem", userSelect:"none" }}>
         <Row>
           <Col>
           <h2 className="text-center mb-4" style={{fontFamily:"font2"}}>Profile</h2>
           <span style={{fontFamily:"font1"}}>
-            <Form onSubmit={handleSave}>
-              <Form.Group controlId="username" className="mb-3">
+            <Form onSubmit={handleSave} style={{justifyContent:"center"}}>
+              <Form.Group controlId="username" className="mb-3" style={{display:"grid",alignItems: "center",alignContent: "center",justifyContent: "center"}}>
+    
                 <Form.Label>Username</Form.Label>
                 <Form.Control 
                   type="text"
                   name="username"
+                  className="editProfileInput"
                   value={profile.username}
                   onChange={handleChange}
                   readOnly={!editing}
+                  style={editing ? {backgroundColor:"white"} : {backgroundColor:"#eee"}}
                 />
               </Form.Group>
-              <Form.Group controlId="email" className="mb-3">
+              <Form.Group controlId="email" className="mb-3" style={{display:"grid",alignItems: "center",alignContent: "center",justifyContent: "center"}}>
                 <Form.Label>Email</Form.Label>
                 <Form.Control 
                   type="email"
                   name="email"
+                  className="editProfileInput"
                   value={profile.email}
                   readOnly
                 />
               </Form.Group>
-              <Form.Group controlId="password" className="mb-3">
+              <Form.Group controlId="password" className="mb-3" style={{display:"grid",alignItems: "center",alignContent: "center",justifyContent: "center"}}>
                 <Form.Label>Password</Form.Label>
                 <Form.Control 
                   type="password"
                   name="password"
+                  className="editProfileInput"
                   value={profile.password}
                   onChange={handleChange}
                   readOnly={!editing}
+                  style={editing ? {backgroundColor:"white"} : {backgroundColor:"#eee"}}
                 />
               </Form.Group>
               {editing ? (
-                <div>
-                  <Button variant="primary" type="submit" className="me-2">Save Changes</Button>
-                  <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
+                <div style={{display:"flex", justifyContent: "center"}}>
+                  <Button variant="secondary" className="button-20" onClick={handleCancel} style={{width:"auto", marginTop:"10px"}}>Cancel</Button>
+                  <Button type="submit" className="me-2 button-19" style={{marginLeft:"20px", width:"auto", marginTop:"10px"}}>Save Changes</Button>
                 </div>
               ) : (
-                <Button variant="primary" onClick={() => setEditing(true)}>Edit Profile</Button>
+                <div style={{display:"grid", justifyContent: "center"}}>
+                  <Button className="button-19" variant="primary" onClick={() => setEditing(true)} style={{width:"auto", marginTop:"10px"}}>Edit Profile</Button>
+                </div>
               )}
             </Form>
           </span>
