@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import BookingModal from "./BookingModal";
+import './Login.scss';
 
 function ProfessionalDetail() {
   const { id } = useParams();
@@ -42,7 +43,7 @@ function ProfessionalDetail() {
     return (
       <div>
         <NavigationBar />
-        <Container className="mt-4">
+        <Container className="mt-4" style={{fontFamily:"font1"}}>
           <p>Loading professional details...</p>
         </Container>
       </div>
@@ -53,7 +54,7 @@ function ProfessionalDetail() {
     return (
       <div>
         <NavigationBar />
-        <Container className="mt-4">
+        <Container className="mt-4" style={{fontFamily:"font1"}}>
           <p>{error}</p>
         </Container>
       </div>
@@ -63,7 +64,7 @@ function ProfessionalDetail() {
   return (
     <div>
       <NavigationBar />
-      <Container style={{ width: "100%", paddingTop: "1.5rem" }}>
+      <Container style={{ width: "100%", paddingTop: "1.5rem", fontFamily:"font1" }}>
         <Row>
           <Col style={{ paddingBottom: "1.5rem", fontFamily:"font1"}}>
           <Link to="/professionals">Back</Link>

@@ -91,8 +91,8 @@ const ProfessionalBooking = () => {
   return (
     <div>
       <ProfessionalNavbar />
-      <Container style={{ paddingTop: "1.5rem" }}>
-        <h1>Professional Bookings</h1>
+      <Container style={{ paddingTop: "1.5rem", fontFamily:"font1" }}>
+        <h1 style={{fontFamily:"font2"}}>Professional Bookings</h1>
         {loading ? (
           <p>Loading bookings...</p>
         ) : error ? (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import ProfessionalNavbar from './ProfessionalNavbar';
 import api from './Axios';
+import './Login.scss';
 
 function ProfessionalProfile() {
   const daysOfWeek = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
@@ -98,10 +99,10 @@ function ProfessionalProfile() {
   return (
     <div>
       <ProfessionalNavbar />
-      <Container style={{ paddingTop: "1.5rem" }}>
+      <Container style={{ paddingTop: "1.5rem", fontFamily:"font1" }}>
         <Row>
           <Col>
-            <h1>Professional Profile</h1>
+            <h1 style={{fontFamily:"font2"}}>Professional Profile</h1>
             <Form onSubmit={handleSave}>
               <Form.Group controlId="name" className="mb-3">
                 <Form.Label>Name</Form.Label>

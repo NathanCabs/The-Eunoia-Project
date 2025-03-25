@@ -3,9 +3,18 @@ import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import './Login.scss';
 
 const ProfessionalNavbar = () => {
   const navigate = useNavigate();
+
+  const activeState = ({ isActive }) => ({
+    color: isActive ? "white" : "",
+    fontWeight: isActive ? "bold" : "",
+    padding: isActive ? "10px" : "",
+    backgroundColor: isActive ? "#3674B5" : "",
+    borderRadius: isActive ? "25px" : "",
+});
   
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -19,11 +28,13 @@ const ProfessionalNavbar = () => {
     navigate("/");
   };
 
+  const eunoiaLogo = require('./assets/icons/eunoia_ver2.png');
+
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand onClick={() => navigate("/professional-booking")} style={{cursor: 'pointer'}}><img src='../eunoia-icon.png' width={40} height={40} alt=""/>
-          Eunoia
+    <Navbar collapseOnSelect expand="lg" style={{background:"transparent",backgroundColor: "transparent"}}>
+      <Container >
+        <Navbar.Brand onClick={() => navigate("/professional-booking")} style={{color:"black", fontFamily:"font2", cursor:"pointer"}}><img src={eunoiaLogo} width={40} height={40} alt="" style={{ margin: "5px" }} />
+          EUNOIA
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -43,7 +54,7 @@ const ProfessionalNavbar = () => {
                     </Row>
                 </Form>
             </Nav>
-          <Nav>
+          <Nav style={{fontFamily:"font1", color:"black"}}>
             <Nav.Link onClick={() => navigate("/professional-booking")}>Bookings</Nav.Link>
             <Nav.Link onClick={() => navigate("/professional-profile")}>Profile</Nav.Link>
           </Nav>
