@@ -58,7 +58,7 @@ const ProfessionalNavbar = () => {
             <Nav.Link onClick={() => navigate("/professional-booking")}>Bookings</Nav.Link>
             <Nav.Link onClick={() => navigate("/professional-profile")}>Profile</Nav.Link>
           </Nav>
-          <Nav>
+          <Nav style={{fontFamily:"font1", color:"black"}}>
             <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
           </Nav>
         </Navbar.Collapse>
