@@ -6,6 +6,8 @@ const Comment = ({ postId, showAll = false, commentRefreshTrigger }) => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingComment, setEditingComment] = useState(null);
+    const userId = localStorage.getItem('userId');
+    const role = localStorage.getItem('role');
 
     useEffect(() => {
         fetchComments();
@@ -60,12 +62,14 @@ const Comment = ({ postId, showAll = false, commentRefreshTrigger }) => {
                                 <p style={{fontFamily:"font1"}}>{comment.content}</p>
                                 <span className="addComment">
                                 <small style={{fontFamily:"font2"}}>{comment.user.username}</small>
-                                {comment.user.id === parseInt(localStorage.getItem('userId')) && (
                                     <div style={{display:"flex"}}>
-                                        <button id="special" className="button-19" style={{marginLeft:"20px", width:"50%"}} onClick={() => setEditingComment(comment)}>Edit</button>
-                                        <button className="button-20" style={{marginLeft:"20px", width:"50%"}} onClick={() => deleteComment(comment.id)}>Delete</button>
+                                    {comment.user.id === parseInt(localStorage.getItem('userId')) && (
+                                        <button id="special" className="button-19" style={{marginLeft:"20px", width:"auto"}} onClick={() => setEditingComment(comment)}>Edit</button>
+                                    )}
+                                    {(Number(userId) === comment.user.id || role === "ADMIN") && (
+                                        <button className="button-20" style={{marginLeft:"20px", width:"auto"}} onClick={() => deleteComment(comment.id)}>Delete</button>
+                                    )}
                                     </div>
-                                )}
                                 </span>
                             </>
                         )}
