@@ -31,7 +31,7 @@ function Home() {
   
     const fetchPosts = async () => {
       try {
-        const response = await api.get("http://localhost:6543/api/posts",);
+        const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts",);
         console.log("Post response data:", response.data);
         const sortedPosts = response.data.sort((a, b) => b.likes - a.likes);
         setPosts(sortedPosts);
@@ -44,7 +44,7 @@ function Home() {
 
     const handleDelete = async (postId) => {
         try {
-          await api.delete(`http://localhost:6543/api/posts/${postId}/delete`,);
+          await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/delete`,);
           alert("Post deleted successfully!");
           fetchPosts();
         } catch (error) {
