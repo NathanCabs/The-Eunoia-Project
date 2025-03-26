@@ -10,14 +10,16 @@ import Comment from './Comment';
 import AddComment from './AddComment';
 import PostForm from './CreatePost';
 import LikePost from './LikePost';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 function Home() {
-
     const [posts, setPosts] = useState([]);
     const [editingPost, setEditingPost] = useState(null);
     const userId = localStorage.getItem('userId');
     const role = localStorage.getItem('role');
     const [commentRefreshTrigger, setCommentRefreshTrigger] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const handleCommentAdded = () => {
         setCommentRefreshTrigger(prev => prev + 1); // Changing this will trigger a re-render
@@ -29,18 +31,20 @@ function Home() {
   
     const fetchPosts = async () => {
       try {
-        const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts",);
+        const response = await api.get("http://localhost:6543/api/posts",);
         console.log("Post response data:", response.data);
         const sortedPosts = response.data.sort((a, b) => b.likes - a.likes);
         setPosts(sortedPosts);
       } catch (err) {
         console.error("Error fetching posts", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     const handleDelete = async (postId) => {
         try {
-          await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/delete`,);
+          await api.delete(`http://localhost:6543/api/posts/${postId}/delete`,);
           alert("Post deleted successfully!");
           fetchPosts();
         } catch (error) {
@@ -61,6 +65,20 @@ function Home() {
         setEditingPost(null);
         fetchPosts();
       };
+
+    if (loading) {
+      return (
+          <div>
+            <NavigationBar />
+            <center>
+              <Container className="homeBackground" style={{fontFamily:"font1", marginTop:"10%"}}>
+                <FontAwesomeIcon icon={faCircleNotch} spin style={{fontSize:"120px", marginBottom:"10px", color:"#8F87F1"}}/>
+                <p>Loading posts...</p>
+              </Container>
+            </center>
+          </div>
+        );
+      }
     
     return (
       <div className="homeBackground" fluid>
@@ -80,8 +98,8 @@ function Home() {
                   </div>
                   <hr></hr>
                   <div>
-                    <p style={{fontFamily:"font1"}}>{post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content}</p>
-                    {post.content.length > 100 && (<Link to={`/post/${post.id}`} style={{fontFamily:"font1", background: 'none', border: 'none', color: 'blue', cursor: 'pointer'}}>Read More</Link>)}
+                    <p style={{fontFamily:"font1"}}>{post.content.length > 150 ? post.content.substring(0, 150) + "..." : post.content}</p>
+                    {post.content.length > 150 && (<Link to={`/post/${post.id}`} style={{fontFamily:"font1", background: 'none', border: 'none', color: 'blue', cursor: 'pointer'}}>Read More</Link>)}
                     <span className="addComment">
                     {Number(userId) === post.user.id && (
                         <button className="button-19" onClick={() => handleEdit(post)} style={{margin:"5px", width:"auto"}}>Edit</button>

@@ -3,6 +3,8 @@ import NavigationBar from './NavigationBar';
 import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import api from './Axios';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import './Login.scss';
 
 function MyBooking() {
@@ -18,7 +20,7 @@ function MyBooking() {
     setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.get("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/user", {
+      const response = await api.get("http://localhost:6543/api/bookings/user", {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + token
@@ -49,7 +51,7 @@ function MyBooking() {
     if (!selectedBooking) return;
     try {
       const token = localStorage.getItem("authToken");
-      const response = await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/bookings/${selectedBooking.id}`, {
+      const response = await api.delete(`http://localhost:6543/api/bookings/${selectedBooking.id}`, {
         headers: {
           "Authorization": "Bearer " + token
         }
@@ -84,7 +86,12 @@ function MyBooking() {
         </Row>
         <Row>
           {loading ? (
-            <p style={{fontFamily:"font1"}}>Loading bookings...</p>
+            <center>
+              <Container className="homeBackground" style={{fontFamily:"font1", marginTop:"10%"}}>
+                  <FontAwesomeIcon icon={faCircleNotch} spin style={{fontSize:"120px", marginBottom:"10px", color:"#8F87F1"}}/>
+                  <p>Loading bookings...</p>
+              </Container>
+            </center>
           ) : error ? (
             <p>{error}</p>
           ) : bookings.length === 0 ? (

@@ -9,6 +9,8 @@ import AddComment from "./AddComment";
 import NavigationBar from "./NavigationBar";
 import CreatePost from "./CreatePost";
 import LikePost from "./LikePost";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 const PostDetail = () => {
   const { postId } = useParams();
@@ -22,7 +24,7 @@ const PostDetail = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}`);
+      const response = await api.get(`http://localhost:6543/api/posts/${postId}`);
       setPost(response.data);
     } catch (err) {
       setError("Post not found.");
@@ -37,7 +39,7 @@ const PostDetail = () => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${post.id}/delete`);
+      await api.delete(`http://localhost:6543/api/posts/${post.id}/delete`);
       alert("Post deleted successfully!");
       navigate("/home");
     } catch (err) {
@@ -62,7 +64,19 @@ const PostDetail = () => {
     setCommentRefresh((prev) => prev + 1);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div>
+      <NavigationBar />
+            <center>
+              <Container className="homeBackground" style={{fontFamily:"font1", marginTop:"10%"}}>
+                <FontAwesomeIcon icon={faCircleNotch} spin style={{fontSize:"120px", marginBottom:"10px", color:"#8F87F1"}}/>
+                <p>Loading post...</p>
+              </Container>
+            </center>
+      </div>
+    )
+  }
   if (error) return <p>{error}</p>;
 
   return (

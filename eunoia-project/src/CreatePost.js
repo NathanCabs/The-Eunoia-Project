@@ -24,7 +24,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
 
         try {
             if (post){
-                await api.put(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${post.id}/update`,
+                await api.put(`http://localhost:6543/api/posts/${post.id}/update`,
                     { content });
                 alert("Post updated successfully!");
                 cancelEdit();
@@ -32,7 +32,7 @@ const CreatePost = ({ post, refreshPosts, cancelEdit }) => {
                     refreshPosts(); // ✅ Only call if it's defined
                 }
             } else {
-                const response = await api.post("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/create", {
+                const response = await api.post("http://localhost:6543/api/posts/create", {
                     content
                   });
     

@@ -1,6 +1,6 @@
 // ProfessionalDetail.js
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import BookingModal from "./BookingModal";
@@ -9,6 +9,8 @@ import './Login.scss';
 function ProfessionalDetail() {
   const { id } = useParams();
   const [professional, setProfessional] = useState(null);
+  const location = useLocation();
+  const from = location.state?.from || "allpro";
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
@@ -17,7 +19,7 @@ function ProfessionalDetail() {
     const fetchProfessional = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/${id}`, {
+        const response = await fetch(`http://localhost:6543/api/professionals/${id}`, {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
@@ -67,7 +69,7 @@ function ProfessionalDetail() {
       <Container style={{ width: "100%", paddingTop: "1.5rem", fontFamily:"font1" }}>
         <Row>
           <Col style={{ paddingBottom: "1.5rem", fontFamily:"font1"}}>
-          <Link to="/professionals">Back</Link>
+          <Link to={from === "allpro" ? "/all-pro" : "/professionals"}>Back</Link>
             <h1 style={{fontFamily:"font2"}}>{professional.name}</h1>
             <h4>{professional.specialization}</h4>
             <p><strong>Focus Area:</strong> {professional.focusArea}</p>

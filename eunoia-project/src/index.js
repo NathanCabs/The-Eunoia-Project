@@ -21,6 +21,7 @@ import AddComment from './AddComment';
 import ProfessionalBooking from './ProfessionalBooking';
 import ProfessionalProfile from './ProfessionalProfile';
 import MyBooking from './MyBooking';
+import AllPro from './AllPro';
 import { ResourceProvider } from './ResourceContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -35,6 +36,7 @@ root.render(
         <Route path="/home" element={<Home />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/professionals" element={<Professionals />} />
+        <Route path="/all-pro" element={< AllPro />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/admin" element={<Admin />} />

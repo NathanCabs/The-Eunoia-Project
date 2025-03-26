@@ -18,10 +18,10 @@ const LikePost = ({ postId, likedBy, refreshPost }) => {
   const handleLikeToggle = async () => {
     try {
       if (liked) {
-        await api.post(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/unlike`);
+        await api.post(`http://localhost:6543/api/posts/${postId}/unlike`);
         setLiked(false);
       } else {
-        await api.post(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/posts/${postId}/like`);
+        await api.post(`http://localhost:6543/api/posts/${postId}/like`);
         setLiked(true);
       }
       if (refreshPost) {
@@ -34,8 +34,8 @@ const LikePost = ({ postId, likedBy, refreshPost }) => {
 
   return (
     <div>
-      <button onClick={handleLikeToggle} style={{background:"transparent", border:"0px", fontSize:"35px", }}>
-        {liked ? <FontAwesomeIcon icon={fasHeart} style={{color:"#ee4545"}} /> : <FontAwesomeIcon icon={farHeart} style={{color:"#ee4545"}} />}
+      <button onClick={handleLikeToggle} style={{background:"transparent", border:"0px", fontSize:"35px", margin:"5px"}} >
+        {liked ? <FontAwesomeIcon icon={fasHeart} style={{color:"#ee4545"}}/> : <FontAwesomeIcon icon={farHeart} style={{color:"#ee4545"}}/>}
       </button>
     </div>
   );

@@ -4,6 +4,8 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import BookingModal from "./BookingModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import './Login.scss';
 
 const Professionals = () => {
@@ -18,7 +20,7 @@ const Professionals = () => {
     const fetchProfessionals = async () => {
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/professionals/recommended", {
+        const response = await fetch("http://localhost:6543/api/professionals/recommended", {
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
@@ -42,16 +44,19 @@ const Professionals = () => {
 
   // Navigate to ProfessionalDetail when card is clicked
   const handleCardClick = (id) => {
-    navigate(`/professional-detail/${id}`);
+    navigate(`/professional-detail/${id}`, { state: { from: "professionals" } });
   };
 
   if (loading) {
     return (
-      <div>
+      <div fluid>
         <NavigationBar />
-        <Container className="homeBackground" style={{fontFamily:"font1"}}>
-          <p>Loading professionals...</p>
+        <center>
+        <Container className="homeBackground" style={{fontFamily:"font1", marginTop:"10%"}}>
+        <FontAwesomeIcon icon={faCircleNotch} spin style={{fontSize:"120px", marginBottom:"10px", color:"#8F87F1"}}/>
+          <p>Loading recommended...</p>
         </Container>
+        </center>
       </div>
     );
   }
@@ -71,7 +76,7 @@ const Professionals = () => {
     <div className="homeBackground" fluid>
       <NavigationBar />
       <Container className="mt-4">
-        <h2 className="text-center mb-4" style={{fontFamily:"font2", userSelect:"none"}}>Professionals</h2>
+        <h2 className="text-center mb-4" style={{fontFamily:"font2", userSelect:"none"}}>Recommended</h2>
         <Row className="g-4">
           {professionals.map((pro) => (
             <Col key={pro.id} xs={12} md={6} lg={4}>

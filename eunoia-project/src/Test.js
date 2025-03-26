@@ -97,7 +97,7 @@ function Test() {
     };
     
     try {
-      const response = await fetch("https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/pre-assessment/submit", {
+      const response = await fetch("http://localhost:6543/api/pre-assessment/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -52,7 +52,8 @@ const NavigationBar = () => {
                     </Nav>
                     <Nav style={{fontFamily:"font1", color:"black"}}>
                         {role === "ADMIN" && <NavLink to="/admin" style={activeState} className="nav-link">Admin</NavLink>}
-                        <NavLink to="/professionals" style={activeState} className="nav-link">Professionals</NavLink>
+                        <NavLink to="/professionals" style={activeState} className="nav-link">Recommended</NavLink>
+                        <NavLink to="/all-pro" style={activeState} className="nav-link">Professionals</NavLink>
                         <NavLink 
                             to={`/my-booking/${localStorage.getItem("userId")}`} 
                             style={activeState} 

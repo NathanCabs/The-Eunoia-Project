@@ -3,6 +3,8 @@ import NavigationBar from './NavigationBar';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import api from './Axios';
 import './Login.scss';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -73,9 +75,12 @@ function Profile() {
     return (
       <div>
         <NavigationBar />
-        <Container className="homeBackground">
-          <p style={{fontFamily:"font1"}}>Loading profile...</p>
-        </Container>
+        <center>
+          <Container className="homeBackground" style={{fontFamily:"font1", marginTop:"10%"}}>
+            <FontAwesomeIcon icon={faCircleNotch} spin style={{fontSize:"120px", marginBottom:"10px", color:"#8F87F1"}}/>
+            <p>Loading profile...</p>
+          </Container>
+        </center>
       </div>
     );
   }

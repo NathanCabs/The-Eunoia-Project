@@ -13,7 +13,7 @@ const Comment = ({ postId, showAll = false, commentRefreshTrigger }) => {
 
     const fetchComments = async () => {
         try {
-            const response = await api.get(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/comments/post/${postId}`);
+            const response = await api.get(`http://localhost:6543/api/comments/post/${postId}`);
             console.log("Comment response data:", response.data);
             setComments(response.data);
             setLoading(false);
@@ -25,7 +25,7 @@ const Comment = ({ postId, showAll = false, commentRefreshTrigger }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            await api.delete(`https://cs-thesis-eunoia-77e25f4fd502.herokuapp.com/api/comments/delete/${commentId}`);
+            await api.delete(`http://localhost:6543/api/comments/delete/${commentId}`);
             setComments(comments.filter(comment => comment.id !== commentId));
         } catch (err) {
             console.error("Failed to delete comment:", err);
