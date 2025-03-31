@@ -4,6 +4,7 @@ import com.thesis2.EunoiaProject.DTO.MHPRegisterRequest;
 import com.thesis2.EunoiaProject.Model.MentalHealthProfessionals;
 import com.thesis2.EunoiaProject.Repository.MentalHealthProfessionalsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,31 +17,60 @@ public class MentalHealthProfessionalsService {
     @Autowired
     private final MentalHealthProfessionalsRepository MHPRepository;
 
+    @Autowired
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public MentalHealthProfessionalsService(MentalHealthProfessionalsRepository MHPRepository) {
+    public MentalHealthProfessionalsService(MentalHealthProfessionalsRepository MHPRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.MHPRepository = MHPRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
 
-    //Register Professional
+//    //Register Professional
+//    @Transactional
+//    public String registerProfessional(MHPRegisterRequest registerRequest) {
+//        if (MHPRepository.findByEmail(registerRequest.getEmail()).isPresent()){
+//            return "Email Already Exists";
+//        }
+//
+//        MentalHealthProfessionals professional = new MentalHealthProfessionals();
+//        professional.setName(registerRequest.getName());
+//        professional.setEmail(registerRequest.getEmail());
+//        professional.setPassword(registerRequest.getPassword());
+//        professional.setUsername(professional.getName());
+//        professional.setSpecialization("Not specified");
+//        professional.setFocusArea("Not specified");
+//        professional.setYearsOfExperience(0);
+//        professional.setQualification("Not specified");
+//        professional.setLocation("Not specified");
+//
+//
+//        professional.setAvailability(new ArrayList<>());
+//        professional.setRating(0.0);
+//        professional.setRole("PROFESSIONAL");
+//
+//        MHPRepository.save(professional);
+//
+//        return "Professional Registered Successfully";
+//    }
+
+    // ✅ Register Professional (with password hashing)
     @Transactional
     public String registerProfessional(MHPRegisterRequest registerRequest) {
-        if (MHPRepository.findByEmail(registerRequest.getEmail()).isPresent()){
+        if (MHPRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             return "Email Already Exists";
         }
 
         MentalHealthProfessionals professional = new MentalHealthProfessionals();
         professional.setName(registerRequest.getName());
         professional.setEmail(registerRequest.getEmail());
-        professional.setPassword(registerRequest.getPassword());
+        professional.setPassword(bCryptPasswordEncoder.encode(registerRequest.getPassword())); // Hash password
         professional.setUsername(professional.getName());
         professional.setSpecialization("Not specified");
         professional.setFocusArea("Not specified");
         professional.setYearsOfExperience(0);
         professional.setQualification("Not specified");
         professional.setLocation("Not specified");
-
-
         professional.setAvailability(new ArrayList<>());
         professional.setRating(0.0);
         professional.setRole("PROFESSIONAL");
@@ -50,11 +80,22 @@ public class MentalHealthProfessionalsService {
         return "Professional Registered Successfully";
     }
 
-    //Login Professional
+//    //Login Professional
+//    @Transactional
+//    public String loginProfessional(String email, String password) {
+//        Optional<MentalHealthProfessionals> professional = MHPRepository.findByEmail(email);
+//        if (professional.isPresent() && professional.get().getPassword().equals(password)) {
+//            return "Login successful!";
+//        } else {
+//            return "Invalid email or password";
+//        }
+//    }
+
+    // ✅ Login Professional (password verification with hashing)
     @Transactional
     public String loginProfessional(String email, String password) {
         Optional<MentalHealthProfessionals> professional = MHPRepository.findByEmail(email);
-        if (professional.isPresent() && professional.get().getPassword().equals(password)) {
+        if (professional.isPresent() && bCryptPasswordEncoder.matches(password, professional.get().getPassword())) {
             return "Login successful!";
         } else {
             return "Invalid email or password";
